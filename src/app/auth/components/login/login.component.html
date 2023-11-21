@@ -1,0 +1,9 @@
+<form #loginForm="ngForm" method="post" (submit)="onLogin(loginForm)"
+    class="p-2 flex flex-col justify-center items-center">
+    <label for="username">Username</label>
+    <input class="my-2 p-1 ring-1" type="text" name="username" id="username" ngModel>
+    <label for="password">Password</label>
+    <input class="my-2 p-1 ring-1" type="text" name="password" id="password" ngModel>
+    <button type="submit"
+        class="my-2 py-1 px-5 ring-1 ring-black rounded-lg hover:shadow-[0_0_5px_2px_purple]">Send</button>
+</form>

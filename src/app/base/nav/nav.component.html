@@ -1,0 +1,31 @@
+<mat-toolbar color="primary">
+    <button type="button" mat-icon-button class="example-icon">
+        <mat-icon class="mat-18" (click)="this.sideNav.open()" *ngIf="!sideNav.opened">menu</mat-icon>
+        <mat-icon class="mat-18" (click)="this.sideNav.close()" *ngIf="sideNav.opened">close</mat-icon>
+    </button>
+    <span class="pl-5">{{title}}</span>
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sideNav="matSidenav">
+        <h2>Me</h2>
+        <mat-divider></mat-divider>
+
+        @for (item of ['checking','profile','roles','users']; track item) {
+        <a routerLink="{{item}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page" class="capitalize">{{item}}</a><br />
+        }
+
+        <mat-divider></mat-divider>
+        <button mat-button class="menu-button w-full flex justify-start items-center py-2 hover:opacity-70">
+            <mat-icon class="mr-[5px]">settings</mat-icon>
+            <span>Settings</span>
+        </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <main>
+            <p>Content</p>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
