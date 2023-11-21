@@ -1,42 +1,49 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, delay, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiURL = 'http://165.227.193.167/';
-  private auth$ = new Subject<boolean>()
+  private auth$ = new BehaviorSubject<boolean>(false)
+  private tokenName = 'PVAT' // PentView Auth Token (PVAT)
 
   constructor(private http: HttpClient) { }
 
-  isAuth$() {
+  get isAuth$() {
     return this.auth$.asObservable()
   }
 
   login(form: { username: string, password: string }): Observable<boolean> {
-    return this.http.post(`${this.apiURL}employee-service/user/auth/login`, {
+    return this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, {
       username: form.username,
       password: form.password
-    }).pipe(delay(500), map((res: any) => {
-      const auth = res.access_token !== undefined
-      auth && this.saveToken(res.access_token)
-      auth && this.auth$.next(auth)
-      return auth
-    }))
+    })
+      .pipe(map((res: { access_token: string }) => {
+        console.log(res)
+        const auth = res.access_token !== undefined;
+        auth && this.saveToken(res.access_token)
+        this.auth$.next(auth)
+        return auth
+      }))
+  }
+
+  get isTokenSaved() {
+    return !!this.token
   }
 
   private saveToken(token: string) {
-    // PentView Auth Token (PVAT)
-    localStorage.setItem('PVAT', token)
+    localStorage.setItem(this.tokenName, token)
   }
 
-  private getToken(token: string) {
-    localStorage.getItem('PVAT')
+  get token() {
+    return localStorage.getItem(this.tokenName)
   }
 
   logout(): void {
+    localStorage.removeItem(this.tokenName)
     this.auth$.next(false)
   }
 }

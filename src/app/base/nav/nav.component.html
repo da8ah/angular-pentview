@@ -1,20 +1,46 @@
 <mat-toolbar color="primary">
-    <button type="button" mat-icon-button class="example-icon">
-        <mat-icon class="mat-18" (click)="this.sideNav.open()" *ngIf="!sideNav.opened">menu</mat-icon>
-        <mat-icon class="mat-18" (click)="this.sideNav.close()" *ngIf="sideNav.opened">close</mat-icon>
-    </button>
-    <span class="pl-5">{{title}}</span>
+    <div class="w-full px-2 flex justify-between items-center">
+        <div class="w-full flex justify-between items-center">
+            <button type="button" mat-icon-button class="example-icon flex justify-center items-center">
+                <mat-icon class="mat-18" (click)="this.sideNav.open()" *ngIf="!sideNav.opened">menu</mat-icon>
+                <mat-icon class="mat-18" (click)="this.sideNav.close()" *ngIf="sideNav.opened">close</mat-icon>
+            </button>
+            <span class="pl-5">{{title}}</span>
+            <button type="button" mat-icon-button (click)="onLogout()"
+                class="example-icon flex justify-center items-center bg-[crimson] rounded-[5px] p-2 bg-opacity-80 hover:bg-opacity-100">
+                <span class="mr-2 text-base">Cerrar sesión</span>
+                <mat-icon class="mat-18">logout</mat-icon>
+            </button>
+        </div>
+    </div>
 </mat-toolbar>
 
 <mat-sidenav-container>
     <mat-sidenav #sideNav="matSidenav">
-        <h2>Me</h2>
+        <a class="w-full" routerLink="profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page">
+            <img class="avatar w-[200px] h-[200px] mb-[5px]"
+                src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" alt="banner">
+            <h2 class="w-full text-center capitalize">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
+        </a>
         <mat-divider></mat-divider>
 
-        @for (item of ['checking','profile','roles','users']; track item) {
-        <a routerLink="{{item}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page" class="capitalize">{{item}}</a><br />
-        }
+        <nav class="w-full py-10">
+            <ul class="w-full p-1 flex flex-col justify-start">
+                @for (item of (role === 'admin') ?
+                ['checking','roles','users'] : ['checking'];
+                track item) {
+                <li class="w-full flex justify-center items-center">
+                    <a class="hover:text-white hover:bg-[#242424] w-full p-2 rounded-[5px] capitalize"
+                        routerLink="{{item}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        ariaCurrentWhenActive="page">
+                        {{item}}
+                    </a>
+                </li>
+                <br />
+                }
+            </ul>
+        </nav>
 
         <mat-divider></mat-divider>
         <button mat-button class="menu-button w-full flex justify-start items-center py-2 hover:opacity-70">

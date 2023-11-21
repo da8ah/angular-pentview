@@ -22,6 +22,6 @@ export const routes: Routes = [
             { path: '', redirectTo: 'checking', pathMatch: 'full' }
         ]
     },
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: '**', loadComponent: () => import('./base/not-found/not-found.component').then(comp => comp.NotFoundComponent) }
 ];

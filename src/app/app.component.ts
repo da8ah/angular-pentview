@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthModule } from './auth/auth.module';
 import { BaseModule } from './base/base.module';
 import { CoreModule } from './core/core.module';
+import { AuthService } from './auth/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { CoreModule } from './core/core.module';
     CoreModule
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [AuthService]
 })
 export class AppComponent { }

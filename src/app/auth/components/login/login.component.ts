@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,13 +14,15 @@ import { AuthService } from '../../services/auth.service';
   providers: [AuthService]
 })
 export class LoginComponent {
-  constructor(private service: AuthService, private router: Router) { }
+  constructor(private service: AuthService, private router: Router) {
+    this.service.isAuth$.pipe(tap(auth => auth)) && this.router.navigateByUrl('/dashboard')
+  }
 
   onLogin(form: NgForm) {
     // if (this.validate(username, password))
     console.log(form.value)
     this.service.login(form.value).subscribe(auth => {
-      auth && this.router.navigateByUrl('/dashboard');
+      auth && this.router.navigateByUrl('/dashboard')
     })
   }
 }
