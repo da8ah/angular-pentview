@@ -18,7 +18,8 @@ export const routes: Routes = [
             { path: 'checking', component: CheckingComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'roles', component: RolesComponent },
-            { path: 'users', component: UsersComponent }
+            { path: 'users', component: UsersComponent },
+            { path: '', redirectTo: 'checking', pathMatch: 'full' }
         ]
     },
     { path: '', redirectTo: 'login', pathMatch: 'full' },

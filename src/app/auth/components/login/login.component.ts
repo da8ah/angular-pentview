@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { map, tap } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class LoginComponent {
   onLogin(form: NgForm) {
     // if (this.validate(username, password))
     console.log(form.value)
-    if (this.service.login(form.value))
-      this.router.navigateByUrl('/dashboard');
+    this.service.login(form.value).subscribe(auth => {
+      auth && this.router.navigateByUrl('/dashboard');
+    })
   }
 }
