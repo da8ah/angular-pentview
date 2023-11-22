@@ -5,9 +5,9 @@ import { CommonModule } from '@angular/common';
   selector: 'app-checking',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './checking.component.html',
-  styleUrl: './checking.component.scss'
+  templateUrl: './clocking.component.html',
+  styleUrl: './clocking.component.scss'
 })
-export class CheckingComponent {
+export class ClockingComponent {
 
 }

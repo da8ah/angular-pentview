@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfileService } from '../services/profile.service';
-import { map } from 'rxjs';
+import { Component } from '@angular/core';
 import { user } from '../profile.types';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-profile',

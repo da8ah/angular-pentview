@@ -17,8 +17,8 @@
 
 <mat-sidenav-container>
     <mat-sidenav #sideNav="matSidenav">
-        <a class="w-full" routerLink="profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-            ariaCurrentWhenActive="page">
+        <a class="w-full hover:underline hover:text-[royalblue]" routerLink="profile" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
             <img class="avatar w-[200px] h-[200px] mb-[5px]"
                 src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" alt="banner">
             <h2 class="w-full text-center capitalize">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
@@ -28,13 +28,19 @@
         <nav class="w-full py-10">
             <ul class="w-full p-1 flex flex-col justify-start">
                 @for (item of (role === 'admin') ?
-                ['checking','roles','users'] : ['checking'];
+                [
+                {path:'clocking', title: 'horario'},
+                {path:'roles', title: 'rol'},
+                {path:'users', title: 'usuarios'}
+                ]
+                :
+                [{path:'clocking', title: 'horario'}];
                 track item) {
                 <li class="w-full flex justify-center items-center">
                     <a class="hover:text-white hover:bg-[#242424] w-full p-2 rounded-[5px] capitalize"
-                        routerLink="{{item}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        routerLink="{{item.path}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
                         ariaCurrentWhenActive="page">
-                        {{item}}
+                        {{item.title}}
                     </a>
                 </li>
                 <br />
@@ -51,7 +57,7 @@
     <mat-sidenav-content>
         <main>
             <p>Content</p>
-            <router-outlet></router-outlet>
+            <router-outlet class="w-full flex flex-col justify-center items-center"></router-outlet>
         </main>
     </mat-sidenav-content>
 </mat-sidenav-container>

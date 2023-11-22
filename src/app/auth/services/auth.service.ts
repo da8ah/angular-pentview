@@ -22,7 +22,6 @@ export class AuthService {
       password: form.password
     })
       .pipe(map((res: { access_token: string }) => {
-        console.log(res)
         const auth = res.access_token !== undefined;
         auth && this.saveToken(res.access_token)
         this.auth$.next(auth)
@@ -31,15 +30,11 @@ export class AuthService {
   }
 
   get isTokenSaved() {
-    return !!this.token
+    return !!localStorage.getItem(this.tokenName)
   }
 
   private saveToken(token: string) {
     localStorage.setItem(this.tokenName, token)
-  }
-
-  get token() {
-    return localStorage.getItem(this.tokenName)
   }
 
   logout(): void {

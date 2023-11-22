@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CheckingComponent } from './components/checking.component';
+import { ClockingComponent } from './components/clocking.component';
 
 
 
@@ -8,7 +8,7 @@ import { CheckingComponent } from './components/checking.component';
   declarations: [],
   imports: [
     CommonModule,
-    CheckingComponent
+    ClockingComponent
   ]
 })
-export class CheckingModule { }
+export class ClockingModule { }

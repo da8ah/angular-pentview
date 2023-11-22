@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CheckingModule } from './checking/checking.module';
+import { ClockingModule } from './clocking/clocking.module';
 import { ProfileModule } from './profile/profile.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
@@ -11,7 +11,7 @@ import { UsersModule } from './users/users.module';
   declarations: [],
   imports: [
     CommonModule,
-    CheckingModule,
+    ClockingModule,
     ProfileModule,
     RolesModule,
     UsersModule
