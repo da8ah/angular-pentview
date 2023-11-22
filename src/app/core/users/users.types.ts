@@ -27,4 +27,4 @@ export type user = {
 
 export type users = user[]
 
-export type tableItem = { position: number; name: string; last: string; email: string; role: string; }
+export type tableItem = { position: number; "_id": string, name: string; last: string; email: string; role: string; }
