@@ -1,5 +1,11 @@
-<section>
+<button class="mx-2 w-[100px]" mat-raised-button color="{{!isNew ? 'primary' : 'basic'}}" (click)="changeNew()">{{!isNew
+    ? 'Nuevo' : 'Cancelar'}}</button>
 
-    <app-table [displayedColumns]="displayedColumns" [users]="users"></app-table>
-
-</section>
+<div class="p-5 flex flex-col justify-center {{isNew && 'items-center'}}">
+    @if (isNew){
+    <app-form class="w-[70%]"></app-form>
+    } @else {
+    <app-table [displayedColumns]="displayedColumns" [users]="users" [isDelete]="isDelete"
+        (changeDelete)="changeDelete()"></app-table>
+    }
+</div>

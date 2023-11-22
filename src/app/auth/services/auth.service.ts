@@ -17,10 +17,7 @@ export class AuthService {
   }
 
   login(form: { username: string, password: string }): Observable<boolean> {
-    return this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, {
-      username: form.username,
-      password: form.password
-    })
+    return this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, form)
       .pipe(map((res: { access_token: string }) => {
         const auth = res.access_token !== undefined;
         auth && this.saveToken(res.access_token)

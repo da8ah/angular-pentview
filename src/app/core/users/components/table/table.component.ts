@@ -1,47 +1,52 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { tableItem, users } from '../../users.types';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatButtonModule, MatSelectModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+  ],
   templateUrl: './table.component.html',
-  styleUrl: './table.component.scss'
+  styleUrl: './table.component.scss',
+  providers: [UsersService]
 })
 export class TableComponent implements OnChanges {
   // Data
   @Input() displayedColumns: string[]
   @Input() users: users
+  @Input() isDelete: boolean
+  @Output() changeDelete = new EventEmitter()
 
-  // Actions
-  isNew: boolean = false
-  isDelete: boolean = false
+  onChangeDelete() {
+    this.changeDelete.emit()
+  }
 
   // Table
   dataSource: MatTableDataSource<tableItem>
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor() { }
+  constructor(private service: UsersService) { }
 
-  onAction(opcion: boolean) {
-    if (opcion) this.isNew = !this.isNew
-    else {
-      if (!this.isDelete) this.displayedColumns.push('actions')
-      else this.displayedColumns.splice(this.displayedColumns.length - 1)
-      this.isDelete = !this.isDelete
-    }
+  onDelete(id: string) {
+    const user = this.users.find(user => user._id === id)
+    if (!!user) this.service.deleteUser(user)
   }
-  onNew() { }
-  onDelete(id: string) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const table: tableItem[] = this.users.map((item, i) => {
@@ -54,8 +59,8 @@ export class TableComponent implements OnChanges {
         'role': item.role.name
       }
     })
-    // this.dataSource = new MatTableDataSource(table)
-    this.userGenerator()
+    this.dataSource = new MatTableDataSource(table)
+    // this.userGenerator()
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }

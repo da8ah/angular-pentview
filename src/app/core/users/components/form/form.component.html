@@ -1,0 +1,24 @@
+<form class="grid grid-rows-4 grid-cols-2 gap-4 justify-center items-center" #userForm="ngForm"
+    (submit)="onNew(userForm)">
+    <mat-form-field class="w-full text-sm">
+        <input matInput type="text" name="firstName" id="name" placeholder="Nombre" ngModel>
+    </mat-form-field>
+    <mat-form-field class="w-full text-sm">
+        <input matInput type="text" name="lastName" id="last" placeholder="Apellido" ngModel>
+    </mat-form-field>
+    <mat-form-field class="w-full text-sm">
+        <input matInput type="text" name="email" id="email" placeholder="Email" ngModel>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+        <mat-select class="w-full" name="role" id="role" placeholder="Rol" ngModel>
+            <mat-option value="ADMIN">ADMIN</mat-option>
+            <mat-option value="USER">USER</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-span-2 text-sm">
+        <input class="w-full" matInput type="text" name="password" id="password" placeholder="Contraseña" ngModel>
+    </mat-form-field>
+    <div class="col-span-2 text-center">
+        <button mat-raised-button color="primary">Guardar</button>
+    </div>
+</form>

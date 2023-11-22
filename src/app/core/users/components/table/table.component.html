@@ -1,63 +1,28 @@
-<h2>Table</h2>
-@if (dataSource.data.length > 10){
-<div class="w-[90%] flex justify-between items-center">
-    <mat-form-field class="w-[100%] text-sm">
-        <input class="w-[100%]" #inputFilter matInput (keyup)="applyFilter(inputFilter.value)" placeholder="Filter">
+<div class="w-full flex justify-between items-center">
+    <button class="mx-2 w-[100px]" mat-raised-button color="{{!isDelete ? 'warn' : 'basic'}}"
+        (click)="onChangeDelete()">{{!isDelete ? 'Eliminar' : 'Cancelar'}}</button>
+    @if (dataSource.data.length > 10){
+    <mat-form-field class="w-full p-0 m-0 border-spacing-0 border-[0] ring-0 text-sm">
+        <input class="w-full" #inputFilter matInput (keyup)="applyFilter(inputFilter.value)" placeholder="Filter">
     </mat-form-field>
-    <div class="flex justify-center items-center">
-        <button class="mx-2 w-[100px]" mat-raised-button color="{{!isNew ? 'primary' : 'basic'}}"
-            (click)="onAction(true)">{{!isNew ? 'Nuevo' : 'Cancelar'}}</button>
-        <button class="mx-2 w-[100px]" mat-raised-button color="{{!isDelete ? 'warn' : 'basic'}}"
-            (click)="onAction(false)">{{!isDelete ? 'Eliminar' : 'Cancelar'}}</button>
-    </div>
+    }
 </div>
-}
 
-@if (isNew){
-<form class="w-[90%] flex justify-center items-center">
-    <table class="w-[100%] justify-center items-center">
-        <tr class="w-[100%]">
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Email</th>
-            <th>Rol</th>
-        </tr>
-        <tr>
-            <td>
-                <mat-form-field class="w-[100%] text-sm">
-                    <input matInput type="text" name="name" id="name">
-                </mat-form-field>
-            </td>
-            <td>
-                <mat-form-field class="w-[100%] text-sm">
-                    <input matInput type="text" name="last" id="last">
-                </mat-form-field>
-            </td>
-            <td>
-                <mat-form-field class="w-[100%] text-sm">
-                    <input matInput type="text" name="email" id="email">
-                </mat-form-field>
-            </td>
-            <td>
-                <mat-form-field>
-                    <mat-select name="role" id="role">
-                        <mat-option value="admin">ADMIN</mat-option>
-                        <mat-option value="user">USER</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </td>
-        </tr>
-    </table>
-    <button mat-raised-button color="primary">Guardar</button>
-</form>
-}
+<div class="w-full text-black">
+    <mat-table #table [dataSource]="dataSource" matSort matSortActive="position" matSortDisableClear
+        matSortDirection="asc">
 
-<div class="w-[90%] text-black">
-    <mat-table #table [dataSource]="dataSource" matSort>
+        @if (isDelete){
+        <ng-container matColumnDef="actions">
+            <mat-header-cell class="justify-center" *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell class="justify-center" *matCellDef="let element">
+                <button class="mx-2" mat-raised-button color="accent" (click)="onDelete(element._id)">Eliminar</button>
+            </mat-cell>
+        </ng-container>
+        }
 
         <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
-
         <ng-container matColumnDef="position">
             <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
@@ -82,15 +47,6 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.role}} </mat-cell>
         </ng-container>
-
-        @if (isDelete){
-        <ng-container matColumnDef="actions">
-            <mat-header-cell class="justify-center" *matHeaderCellDef> Acciones </mat-header-cell>
-            <mat-cell class="justify-center" *matCellDef="let element">
-                <button class="mx-2" mat-raised-button color="accent" (click)="onDelete(element._id)">Eliminar</button>
-            </mat-cell>
-        </ng-container>
-        }
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

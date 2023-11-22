@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
+import { validateLogin } from '../../../../utils/validations';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -19,10 +20,11 @@ export class LoginComponent {
   }
 
   onLogin(form: NgForm) {
-    // if (this.validate(username, password))
-    console.log(form.value)
-    this.service.login(form.value).subscribe(auth => {
-      auth && this.router.navigateByUrl('/dashboard')
-    })
+    if (validateLogin(form.value)) {
+      this.service.login(form.value).subscribe(auth => {
+        auth && this.router.navigateByUrl('/dashboard')
+      })
+    }
+    else console.log('No valid User ', form.value)
   }
 }
