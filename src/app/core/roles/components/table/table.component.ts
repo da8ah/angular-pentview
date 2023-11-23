@@ -1,13 +1,13 @@
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { tableItem, user } from '../../users.types';
-import { UsersService } from '../../services/users.service';
+import { role, tableItem } from '../../roles.types';
+import { RolesService } from '../../services/roles.service';
 
 @Component({
   selector: 'app-table',
@@ -23,40 +23,26 @@ import { UsersService } from '../../services/users.service';
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [UsersService]
+  providers: [RolesService]
 })
 export class TableComponent implements OnChanges {
   // Data
   @Input() displayedColumns: string[]
-  @Input() users: user[]
+  @Input() roles: role[]
   @Input() isDelete: boolean
-  @Output() changeDelete = new EventEmitter()
-
-  onChangeDelete() {
-    this.changeDelete.emit()
-  }
 
   // Table
   dataSource: MatTableDataSource<tableItem>
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor(private service: UsersService) { }
-
-  onDelete(id: string) {
-    const user = this.users.find(user => user._id === id)
-    if (!!user) this.service.deleteUser(user)
-  }
+  constructor(private service: RolesService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const table: tableItem[] = this.users.map((item, i) => {
+    const table: tableItem[] = this.roles.map((item, i) => {
       return {
         'position': i + 1,
-        '_id': item._id,
-        'name': item.firstName,
-        'last': item.lastName,
-        'email': item.email,
-        'role': item.role.name
+        'name': item.name
       }
     })
     this.dataSource = new MatTableDataSource(table)
@@ -84,29 +70,22 @@ export class TableComponent implements OnChanges {
   userGenerator() {
     // Create 100 users
     const table: tableItem[] = [];
-    for (let i = 1; i <= 100; i++) { table.push(createNewUser(i)); }
+    for (let i = 1; i <= 100; i++) { table.push(createNewRole(i)); }
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(table);
   }
 }
 
+
 /** Builds and returns a new User. */
-function createNewUser(index: number): tableItem {
+function createNewRole(index: number): tableItem {
   const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
     'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
     'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
 
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
   return {
     position: index,
-    _id: index.toString(),
-    name: name,
-    last: name,
-    email: `${name}@email.com`,
-    role: Math.round(Math.random() * 100) % 2 === 0 ? 'ADMIN' : 'USER'
-  };
+    name: NAMES[Math.round(Math.random() * (NAMES.length - 1))]
+  }
 }

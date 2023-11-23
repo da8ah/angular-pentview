@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { MatButtonModule } from '@angular/material/button';
-import { users } from '../users.types';
+import { user } from '../users.types';
 import { TableComponent } from './table/table.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -25,15 +25,15 @@ import { FormComponent } from './form/form.component';
 })
 export class UsersComponent {
   displayedColumns: string[] = ['position', 'name', 'last', 'email', 'role']
-  users: users = []
+  users: user[] = []
 
   isNew: boolean = false
   isDelete: boolean = false
 
   constructor(private service: UsersService) {
-    this.service.users$.subscribe((users: users) => {
+    this.service.users$.subscribe((users: user[]) => {
       if (users.length > 0) {
-        // users.splice(0, 1)
+        users.splice(0, 1) // Admin Admin
         this.users = users
       }
     })

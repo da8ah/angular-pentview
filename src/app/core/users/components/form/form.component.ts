@@ -7,6 +7,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { UsersService } from '../../services/users.service';
 import { NgForm, FormsModule } from '@angular/forms';
 import { validateUser } from '../../../../../utils/validations';
+import { RolesService } from '../../../roles/services/roles.service';
+import { role } from '../../../roles/roles.types';
 
 @Component({
   selector: 'app-form',
@@ -21,15 +23,21 @@ import { validateUser } from '../../../../../utils/validations';
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
-  providers: [UsersService]
+  providers: [UsersService, RolesService]
 })
 export class FormComponent {
+  rolesName: string[] = []
 
-  constructor(private service: UsersService) { }
+  constructor(private service: UsersService, private rolesService: RolesService) {
+    this.rolesService.roles$.subscribe((roles: role[]) => {
+      console.log(roles)
+      this.rolesName = roles.map(role => role.name)
+    })
+  }
 
   onNew(form: NgForm) {
     console.log('New: ', form.value)
-    if (validateUser(form.value)) this.service.postUser(form.value)
+    // if (validateUser(form.value)) this.service.postUser(form.value)
   }
 }
 

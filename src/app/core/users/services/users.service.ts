@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
-import { user, users } from '../users.types';
+import { user } from '../users.types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
   private apiURL = 'http://165.227.193.167/';
-  private users = new BehaviorSubject<users>([])
+  private users = new BehaviorSubject<user[]>([])
 
   constructor(private http: HttpClient) {
     if (this.users.value.length === 0) this.getUsers()
@@ -26,7 +26,7 @@ export class UsersService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.get(`${this.apiURL}employee-service/user/list`, { headers })
       .subscribe((res: any) => {
-        this.users.next(res as users)
+        this.users.next(res as user[])
       })
   }
 

@@ -1,7 +1,7 @@
 <div class="w-full flex justify-between items-center">
     <button class="mx-2 w-[100px]" mat-raised-button color="{{!isDelete ? 'warn' : 'basic'}}"
         (click)="onChangeDelete()">{{!isDelete ? 'Eliminar' : 'Cancelar'}}</button>
-    @if (dataSource.data.length > 10){
+    @if (dataSource.data.length > 5){
     <mat-form-field class="w-full p-0 m-0 border-spacing-0 border-[0] ring-0 text-sm">
         <input class="w-full" #inputFilter matInput (keyup)="applyFilter(inputFilter.value)" placeholder="Filter">
     </mat-form-field>
@@ -30,12 +30,12 @@
 
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-cell class="capitalize" *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="last">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.last}} </mat-cell>
+            <mat-cell class="capitalize" *matCellDef="let element"> {{element.last}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="email">
@@ -52,7 +52,7 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
 
-    @if (dataSource.data.length > 10){
+    @if (dataSource.data.length > 5){
     <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
     }
 </div>

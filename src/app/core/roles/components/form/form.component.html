@@ -1,0 +1,8 @@
+<form class="w-full flex justify-between items-center" #roleForm="ngForm" (submit)="onNew(roleForm)">
+    <mat-form-field class="w-[90%] text-sm">
+        <input matInput type="text" name="name" id="name" placeholder="Rol" ngModel>
+    </mat-form-field>
+    <div class="text-center">
+        <button mat-raised-button color="primary">Agregar</button>
+    </div>
+</form>

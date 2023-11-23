@@ -13,3 +13,8 @@ body {
 body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.mat-drawer-inner-container {
+    display: flex !important;
+    flex-direction: column;
+}
