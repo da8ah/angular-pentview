@@ -32,9 +32,10 @@ export class UsersService {
 
   postUser(user: user) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/user`, { file: "PNG file", ...user }, { headers })
+    this.http.post(`${this.apiURL}employee-service/user`, user, { headers, observe: 'response' })
       .subscribe((res: any) => {
         console.log(res)
+        console.log(res.ok)
       })
   }
 

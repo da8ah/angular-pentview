@@ -1,1 +1,38 @@
-<p>{{email}}</p>
+<div class="p-5 flex flex-col justify-center items-center">
+    <div class="w-[70%]">
+
+        <div class="w-full flex justify-center">
+            <div class="w-[150px] h-[150px] flex flex-col items-center rounded-full">
+                <img class="object-contain w-full h-full" *ngIf="pfp" [src]="pfp" id="imageViewer">
+            </div>
+        </div>
+
+        <form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center"
+            #userForm="ngForm" (submit)="onUpdate(userForm)">
+            <mat-form-field class="w-full text-sm">
+                <input matInput type="text" name="firstName" id="firstName" [(ngModel)]="profile.firstName"
+                    placeholder="Nombre" required>
+            </mat-form-field>
+            <mat-form-field class="w-full text-sm">
+                <input matInput type="text" name="lastName" id="lastName" [(ngModel)]="profile.lastName"
+                    placeholder="Apellido" required>
+            </mat-form-field>
+            <mat-form-field class="w-full text-sm">
+                <input matInput type="text" name="email" id="email" [(ngModel)]="profile.email" placeholder="Email"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="w-full text-sm">
+                <input matInput type="text" name="role" id="role" [value]="profile.role.name" placeholder="Rol" disabled
+                    ngModel>
+            </mat-form-field>
+            <mat-form-field class="col-span-2 w-full text-sm">
+                <input class="w-full" matInput type="password" name="password" id="password" placeholder="********"
+                    disabled ngModel>
+            </mat-form-field>
+            <div class="col-span-2 text-center">
+                <button class="p-2" mat-raised-button color="primary">Guardar</button>
+            </div>
+        </form>
+
+    </div>
+</div>

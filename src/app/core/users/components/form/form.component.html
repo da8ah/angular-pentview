@@ -6,9 +6,9 @@
 
 <form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center" #userForm="ngForm"
     (submit)="onNew(userForm)">
-    <input class="col-span-2 text-xs {{URL === defaultPFP && 'w-[90px]'}}" type="file" accept=".png" name="profileImage"
-        id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data" (change)="useImage($event)"
-        required ngModel>
+    <input class="col-span-2 text-xs {{URL === pfpNotFound && 'w-[90px]'}}" type="file" accept=".png"
+        name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
+        (change)="useImage($event)" required ngModel>
     <mat-form-field class="w-full text-sm">
         <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required ngModel>
     </mat-form-field>

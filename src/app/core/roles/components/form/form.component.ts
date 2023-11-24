@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { role } from '../../roles.types';
 import { RolesService } from '../../services/roles.service';
+import { validateRole } from '../../../../../utils/validations';
 
 @Component({
   selector: 'app-form',
@@ -32,7 +33,9 @@ export class FormComponent {
   }
 
   onNew(form: NgForm) {
-    console.log('New: ', form.value)
-    // if (validateRole(form.value)) this.service.postRole(form.value)
+    console.log('New: ', form.value, validateRole(form.value.name))
+    if (validateRole(form.value.name))
+      if (this.service.postRole(form.value))
+        this.roles.push(form.value.name)
   }
 }

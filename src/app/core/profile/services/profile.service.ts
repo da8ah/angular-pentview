@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { profile } from '../profile.types';
+import { profile, putProfile } from '../profile.types';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,15 @@ export class ProfileService {
     this.http.get(`${this.apiURL}employee-service/user/profile`, { headers })
       .subscribe((res: any) => {
         this.profile.next(res as profile || null)
+      })
+  }
+
+  putProfile(profile: putProfile) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.put(`${this.apiURL}employee-service/user/update-profile`, profile, { headers, observe: 'response' })
+      .subscribe((res: any) => {
+        console.log(res)
+        console.log(res.ok)
       })
   }
 }

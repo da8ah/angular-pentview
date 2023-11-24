@@ -40,7 +40,7 @@ export type user = {
     "role": role,
     "email": string,
     "createdAt": string,
-    "profileImage"?: string,
+    "profileImage"?: string | File,
     "__v": number
 }
 

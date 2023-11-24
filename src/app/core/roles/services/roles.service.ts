@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { role } from '../roles.types';
 
 @Injectable({
@@ -32,9 +32,7 @@ export class RolesService {
 
   postRole(role: { name: string }) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/role`, role, { headers })
-      .subscribe((res: any) => {
-        console.log(res)
-      })
+    return this.http.post(`${this.apiURL}employee-service/role`, role, { headers, observe: 'response' })
+      .pipe(map((res: any) => res.ok))
   }
 }

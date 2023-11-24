@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ClockingService } from '../../services/clocking.service';
-import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -29,6 +28,8 @@ export class FormComponent {
 
   progressOut = 0
   isClockOutActivated = false
+
+  constructor(private service: ClockingService) { }
 
   onProgressIn() {
     // Using Basic Interval
@@ -54,13 +55,11 @@ export class FormComponent {
   }
 
   onClockIn() {
-    console.log('In: ', this.progressIn)
-    // this.service.postClockIn(form.value)
+    if (this.progressIn >= 100) this.service.postClockIn()
     this.resetIn()
   }
   onClockOut() {
-    console.log('Out: ', this.progressOut)
-    // this.service.postClockOut(form.value)
+    if (this.progressOut >= 100) this.service.postClockOut()
     this.resetOut()
   }
 
