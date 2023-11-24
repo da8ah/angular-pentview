@@ -1,1 +1,39 @@
-<p>form works!</p>
+<form class="w-full flex justify-between items-center" action="#" method="dialog">
+    <div class="py-2 flex-1 text-center justify-between">
+        <div class="py-2 flex justify-center items-center">
+            <span class="mr-[5px]">Registrar</span>
+            <mat-icon class="mr-[5px]">work_history</mat-icon>
+        </div>
+        <mat-progress-bar class="py-2" mode="determinate" color="primary" [value]="progressIn"></mat-progress-bar>
+        <div class="my-2 flex justify-center items-center">
+            @if (!isClockInActivated) {
+            <button class="py-2 w-[100px]" mat-raised-button color="primary" (click)="onProgressIn()">Entrada</button>
+            } @else {
+            <button mat-icon-button color="basic" (click)="resetIn()">
+                <mat-icon class="mr-[5px]">block</mat-icon>
+            </button>
+            <button class="w-[100px]" mat-raised-button color="primary" (click)="onClockIn()">Confirmar</button>
+            }
+        </div>
+    </div>
+    <div class="flex-1 text-center">
+        <ng-content></ng-content>
+    </div>
+    <div class="py-2 flex-1 text-center">
+        <div class="py-2 flex justify-center items-center">
+            <span class="mr-[5px]">Registrar</span>
+            <mat-icon class="mr-[5px]">directions_run</mat-icon>
+        </div>
+        <mat-progress-bar class="py-2" mode="determinate" color="warn" [value]="progressOut"></mat-progress-bar>
+        <div class="my-2 flex justify-center items-center">
+            @if (!isClockOutActivated) {
+            <button class="py-2 w-[100px]" mat-raised-button color="warn" (click)="onProgressOut()">Salida</button>
+            } @else {
+            <button mat-icon-button color="basic" (click)="resetOut()">
+                <mat-icon class="mr-[5px]">block</mat-icon>
+            </button>
+            <button class="w-[100px]" mat-raised-button color="warn" (click)="onClockOut()">Confirmar</button>
+            }
+        </div>
+    </div>
+</form>

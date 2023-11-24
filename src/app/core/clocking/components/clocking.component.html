@@ -1,1 +1,8 @@
-<p>clocking works!</p>
+<div class="p-5 flex flex-col justify-center items-center">
+    <div class="w-[70%]">
+        <app-form class="p-2">
+            <app-clock></app-clock>
+        </app-form>
+        <app-table [displayedColumns]="displayedColumns" [clockings]="clockings"></app-table>
+    </div>
+</div>

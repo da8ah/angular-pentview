@@ -7,31 +7,39 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ClockingService {
   private apiURL = 'http://165.227.193.167/';
-  private hours = new BehaviorSubject([])
+  private clockings = new BehaviorSubject([])
 
   constructor(private http: HttpClient) {
-    if (this.hours.value.length === 0) this.getHours()
+    if (this.clockings.value.length === 0) this.getClockings()
   }
 
-  get hours$() {
-    return this.hours.asObservable()
+  get clockings$() {
+    return this.clockings.asObservable()
   }
 
   private get token() {
     return localStorage.getItem('PVAT')
   }
 
-  getHours() {
+  getClockings() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.get<{ data: [] }>(`${this.apiURL}employee-service/hour-register`, { headers })
       .subscribe((res: { data: [] }) => {
         console.log(res.data)
-        this.hours.next(res.data)
-        // this.hours.next(res.data as )
+        this.clockings.next(res.data)
+        // this.clockings.next(res.data as )
       })
   }
 
-  postHour() {
+  postClockIn() {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'in', register: new Date().toISOString() }, { headers })
+      .subscribe((res: any) => {
+        console.log(res)
+      })
+  }
+
+  postClockOut() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'in', register: new Date().toISOString() }, { headers })
       .subscribe((res: any) => {

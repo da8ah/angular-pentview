@@ -27,12 +27,27 @@ import { role } from '../../../roles/roles.types';
 })
 export class FormComponent {
   rolesName: string[] = []
+  defaultPFP = "/assets/nopfp.png"
+  URL: any = this.defaultPFP
 
   constructor(private service: UsersService, private rolesService: RolesService) {
     this.rolesService.roles$.subscribe((roles: role[]) => {
       console.log(roles)
       this.rolesName = roles.map(role => role.name)
     })
+  }
+
+  useImage(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+
+
+      reader.readAsDataURL(event.target.files[0]); // Read file as data url
+      reader.onloadend = (e) => { // function call once readAsDataUrl is completed
+        this.URL = e.target!['result']; // Set image in element
+        // this._changeDetection.markForCheck(); // Is called because ChangeDetection is set to onPush
+      };
+    } else this.URL = this.defaultPFP;
   }
 
   onNew(form: NgForm) {

@@ -19,8 +19,8 @@
     <mat-sidenav #sideNav="matSidenav">
         <a class="w-full hover:underline hover:text-[royalblue]" routerLink="profile" routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
-            <img class="avatar w-[200px] h-[200px] mb-[5px]"
-                src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" alt="banner">
+            <img class="avatar rounded-full mb-1" ngSrc="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+                alt="banner" width="200" height="200" priority>
             <h2 class="w-full text-center capitalize">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
         </a>
         <mat-divider></mat-divider>
@@ -48,7 +48,8 @@
         </nav>
 
         <mat-divider></mat-divider>
-        <button mat-button class="menu-button py-1 w-full flex justify-start items-center hover:opacity-70">
+        <button mat-button
+            class="menu-button cursor-not-allowed py-1 w-full flex justify-start items-center hover:opacity-70">
             <mat-icon class="mr-[5px]">settings</mat-icon>
             <span>Settings</span>
         </button>

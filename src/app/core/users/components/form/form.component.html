@@ -1,25 +1,35 @@
-<form class="grid grid-rows-4 grid-cols-2 gap-4 justify-center items-center" #userForm="ngForm"
+<div class="w-full flex justify-center">
+    <div class="w-[150px] h-[150px] flex flex-col items-center rounded-full">
+        <img class="object-contain w-full h-full" *ngIf="URL" [src]="URL" id="imageViewer">
+    </div>
+</div>
+
+<form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center" #userForm="ngForm"
     (submit)="onNew(userForm)">
+    <input class="col-span-2 text-xs {{URL === defaultPFP && 'w-[90px]'}}" type="file" accept=".png" name="profileImage"
+        id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data" (change)="useImage($event)"
+        required ngModel>
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" ngModel>
+        <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required ngModel>
     </mat-form-field>
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="lastName" id="lastName" placeholder="Apellido" ngModel>
+        <input matInput type="text" name="lastName" id="lastName" placeholder="Apellido" required ngModel>
     </mat-form-field>
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="email" id="email" placeholder="Email" ngModel>
+        <input matInput type="text" name="email" id="email" placeholder="Email" required ngModel>
     </mat-form-field>
     <mat-form-field class="w-full">
-        <mat-select class="w-full" name="role" id="role" placeholder="Rol" ngModel>
+        <mat-select class="w-full" name="role" id="role" placeholder="Rol" required ngModel>
             <ng-container *ngFor="let item of rolesName">
                 <mat-option value="{{item}}">{{item}}</mat-option>
             </ng-container>
         </mat-select>
     </mat-form-field>
-    <mat-form-field class="col-span-2 text-sm">
-        <input class="w-full" matInput type="password" name="password" id="password" placeholder="Contraseña" ngModel>
+    <mat-form-field class="col-span-2 w-full text-sm">
+        <input class="w-full" matInput type="password" name="password" id="password" placeholder="Contraseña" required
+            ngModel>
     </mat-form-field>
     <div class="col-span-2 text-center">
-        <button mat-raised-button color="primary">Guardar</button>
+        <button class="p-2" mat-raised-button color="primary">Guardar</button>
     </div>
 </form>
