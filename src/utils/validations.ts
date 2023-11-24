@@ -3,7 +3,7 @@ export const patterns = {
         NAME: /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ]{1,15}$/,
         LAST: /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ]{1,15}$/,
         EMAIL: /^([\w\.\-]+){1,3}@([\w\-]+)((\.(\w){2,3})+)$/,
-        PASSWORD: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[~!@#$%^&*+\-/.,\\{ }[\\;:?<>"'_]).{8,}$/,
+        PASSWORD: /^(?=.*[0-9])(?=.*[a-z])(?=.*[~!@#$%^&*+\-/.,\\{ }[\\;:?<>"'_]).{8,}$/,
     },
     Role: {
         NAME: /^[A-Za-z0-1]{1,15}$/
@@ -12,6 +12,7 @@ export const patterns = {
 
 export const validateLogin = ({ username, password }: { username: string, password: string }) => {
     try {
+        console.log({ username, password })
         if (!new RegExp(patterns.User.EMAIL).test(username)) return false;
         if (!new RegExp(patterns.User.PASSWORD).test(password)) return false;
         return true;
