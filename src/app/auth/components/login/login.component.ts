@@ -40,6 +40,7 @@ export class LoginComponent {
   onLogin(form: NgForm) {
     if (validateLogin(form.value)) {
       this.isError = false
+      this.service.setCredentials(form.value)
       this.service.login(form.value).subscribe(auth => {
         auth && this.router.navigateByUrl('/dashboard')
       })

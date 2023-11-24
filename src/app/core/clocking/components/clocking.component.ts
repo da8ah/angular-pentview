@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClockingService } from '../services/clocking.service';
+import { Component } from '@angular/core';
 import { clocking } from '../clocking.types';
+import { ClockingService } from '../services/clocking.service';
+import { ClockComponent } from './clock/clock.component';
 import { FormComponent } from './form/form.component';
 import { TableComponent } from './table/table.component';
-import { ClockComponent } from './clock/clock.component';
 
 @Component({
   selector: 'app-checking',
@@ -25,7 +25,6 @@ export class ClockingComponent {
 
   constructor(private service: ClockingService) {
     this.service.clockings$.subscribe((clockings: clocking[]) => {
-      console.log(clockings)
       this.clockings = clockings
     })
   }

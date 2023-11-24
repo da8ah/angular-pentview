@@ -12,7 +12,6 @@ export const patterns = {
 
 export const validateLogin = ({ username, password }: { username: string, password: string }) => {
     try {
-        console.log({ username, password })
         if (!new RegExp(patterns.User.EMAIL).test(username)) return false;
         if (!new RegExp(patterns.User.PASSWORD).test(password)) return false;
         return true;

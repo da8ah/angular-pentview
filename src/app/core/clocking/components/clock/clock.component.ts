@@ -1,35 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription, timer, map, share } from 'rxjs';
+import { Component } from '@angular/core';
+import { ClockService } from '../../../../base/services/clock.service';
 
 @Component({
   selector: 'app-clock',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './clock.component.html',
-  styleUrl: './clock.component.scss'
+  styleUrl: './clock.component.scss',
+  providers: [ClockService]
 })
-export class ClockComponent implements OnInit, OnDestroy {
-  subscription: Subscription
-  intervalId: any
+export class ClockComponent {
   rxTime = new Date()
 
-  ngOnInit() {
-    // Using RxJS Timer
-    this.subscription = timer(0, 1000)
-      .pipe(
-        map(() => new Date()),
-        share()
-      )
-      .subscribe(time => {
-        this.rxTime = time
-      });
-  }
-
-  ngOnDestroy() {
-    clearInterval(this.intervalId);
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  constructor(private clock: ClockService) {
+    this.clock.start((time: Date) => {
+      this.rxTime = time
+    })
   }
 }

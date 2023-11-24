@@ -1,6 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -10,9 +11,8 @@ import { AuthService } from '../../auth/services/auth.service';
 import { CoreModule } from '../../core/core.module';
 import { profile as ProfileType } from '../../core/profile/profile.types';
 import { ProfileService } from '../../core/profile/services/profile.service';
-import { ClockService } from '../services/clock.service';
 import { DialogComponent } from '../dialog/dialog.component';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ClockService } from '../services/clock.service';
 
 @Component({
   selector: 'app-nav',
@@ -57,16 +57,16 @@ export class NavComponent implements AfterViewInit {
       seconds: number
     }
   }>;
-  timeToOpenDialog = 60 * 58
+  timeToOpenDialog = 5 * 1
   dialogTimeAcc = 0
-  dialogSteps = 60
+  dialogSteps = 5
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
-    this.clock.start((time: Date) => {
+    this.clock.start(() => {
       this.dialogTimeAcc++;
       if (this.dialogTimeAcc === this.timeToOpenDialog) this.openDialog();
-      if (this.dialogTimeAcc > this.timeToOpenDialog) this.updataDialog();
+      if (this.dialogTimeAcc > this.timeToOpenDialog) this.updateDialog();
     })
   }
 
@@ -80,7 +80,9 @@ export class NavComponent implements AfterViewInit {
     });
   }
 
-  updataDialog() {
+  updateDialog() {
+    if (!this.dialogRef.componentInstance) return;
+
     const timer = this.dialogTimeAcc - this.timeToOpenDialog;
     const progress = 100 - 100 * timer / this.dialogSteps;
     const seconds = this.dialogSteps - timer;
@@ -88,8 +90,9 @@ export class NavComponent implements AfterViewInit {
     this.dialogRef.componentInstance.data.seconds = seconds;
     if (progress <= 0) {
       this.dialogRef.componentInstance.data.seconds = 0;
-      console.log("Loggedout")
+      this.dialogRef.close()
       this.onLogout()
+      this.dialogTimeAcc = 0
     }
   }
 

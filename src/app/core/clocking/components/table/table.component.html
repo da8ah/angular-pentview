@@ -8,7 +8,7 @@
 
 <div class="w-full text-black">
     <mat-table #table [dataSource]="dataSource" matSort matSortActive="position" matSortDisableClear
-        matSortDirection="asc">
+        matSortDirection="desc">
 
         <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -24,7 +24,9 @@
 
         <ng-container matColumnDef="register">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Registro </mat-header-cell>
-            <mat-cell class="uppercase" *matCellDef="let element"> {{element.register}} </mat-cell>
+            <mat-cell class="uppercase" *matCellDef="let element"> {{ element.register !== '' ? (element.register |
+                date: 'dd/MM/yyy, hh:mm:ss a') : 'Fecha no registrada' }}
+            </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

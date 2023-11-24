@@ -7,7 +7,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { clocking, tableItem } from '../../clocking.types';
-import { ClockingService } from '../../services/clocking.service';
 
 @Component({
   selector: 'app-table',
@@ -23,7 +22,6 @@ import { ClockingService } from '../../services/clocking.service';
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [ClockingService]
 })
 export class TableComponent {
   // Data
@@ -36,7 +34,7 @@ export class TableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor(private service: ClockingService) { }
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const table: tableItem[] = this.clockings.map((item, i) => {
@@ -44,7 +42,7 @@ export class TableComponent {
         'position': i + 1,
         '_id': item._id,
         'type': item.type,
-        'register': !!item.register ? new Date(item.register) : 'Fecha no registrada'
+        'register': !!item.register ? new Date(item.register).toISOString() : ''
       }
     })
     this.dataSource = new MatTableDataSource(table)
