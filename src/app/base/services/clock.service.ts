@@ -1,17 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription, map, share, timer } from 'rxjs';
+import { Observable, Subject, Subscription, map, share, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClockService implements OnDestroy {
   subscription: Subscription
+  static clock = new Subject<Date>()
   intervalId: any
   rxTime = new Date()
-
-  get clock$() {
-    return this.subscription
-  }
 
   start(callback: any) {
     // Using RxJS Timer
@@ -21,6 +18,7 @@ export class ClockService implements OnDestroy {
         share()
       )
       .subscribe(time => {
+        ClockService.clock.next(time)
         this.rxTime = time;
         callback(time)
       });

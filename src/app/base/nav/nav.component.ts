@@ -13,6 +13,7 @@ import { profile as ProfileType } from '../../core/profile/profile.types';
 import { ProfileService } from '../../core/profile/services/profile.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ClockService } from '../services/clock.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -34,7 +35,7 @@ import { ClockService } from '../services/clock.service';
   providers: [ProfileService, AuthService, ClockService, MatDialogModule]
 })
 export class NavComponent implements AfterViewInit {
-  title = 'angular-pentview';
+  title = 'Pentview Control de Horas';
   private profile: ProfileType = {
     _id: '',
     email: '',
@@ -57,9 +58,9 @@ export class NavComponent implements AfterViewInit {
       seconds: number
     }
   }>;
-  timeToOpenDialog = 5 * 1
+  timeToOpenDialog = 60 * 59;
+  dialogSteps = 60
   dialogTimeAcc = 0
-  dialogSteps = 5
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
@@ -81,15 +82,16 @@ export class NavComponent implements AfterViewInit {
   }
 
   updateDialog() {
-    if (!this.dialogRef.componentInstance) return;
-
     const timer = this.dialogTimeAcc - this.timeToOpenDialog;
     const progress = 100 - 100 * timer / this.dialogSteps;
     const seconds = this.dialogSteps - timer;
-    this.dialogRef.componentInstance.data.progress = progress;
-    this.dialogRef.componentInstance.data.seconds = seconds;
+
+    if (this.dialogRef.componentInstance) {
+      this.dialogRef.componentInstance.data.progress = progress;
+      this.dialogRef.componentInstance.data.seconds = seconds;
+    }
+
     if (progress <= 0) {
-      this.dialogRef.componentInstance.data.seconds = 0;
       this.dialogRef.close()
       this.onLogout()
       this.dialogTimeAcc = 0

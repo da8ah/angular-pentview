@@ -5,7 +5,7 @@
                 <mat-icon class="mat-18" (click)="this.sideNav.open()" *ngIf="!sideNav.opened">menu</mat-icon>
                 <mat-icon class="mat-18" (click)="this.sideNav.close()" *ngIf="sideNav.opened">close</mat-icon>
             </button>
-            <span class="pl-5">{{title}}</span>
+            <span class="hidden md:block pl-5">{{title}}</span>
             <button type="button" mat-icon-button (click)="onLogout()"
                 class="example-icon flex justify-center items-center text-black hover:text-white bg-white hover:bg-[crimson] rounded-[5px] p-2 bg-opacity-80 hover:bg-opacity-100">
                 <span class="mr-2 text-base">Cerrar sesión</span>
@@ -17,6 +17,8 @@
 
 <mat-sidenav-container>
     <mat-sidenav #sideNav="matSidenav">
+        <span class="w-full block md:hidden py-2 text-center">{{title}}</span>
+        <mat-divider class="block md:hidden"></mat-divider>
         <a class="w-full hover:underline hover:text-[royalblue]" routerLink="profile" routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
             <img class="avatar rounded-full mb-1" ngSrc="https://rickandmortyapi.com/api/character/avatar/1.jpeg"

@@ -27,13 +27,11 @@ export class FormComponent {
 
   constructor(private service: RolesService) {
     this.service.roles$.subscribe((roles: role[]) => {
-      console.log(roles)
       this.roles = roles
     })
   }
 
   onNew(form: NgForm) {
-    console.log('New: ', form.value, validateRole(form.value.name))
     if (validateRole(form.value.name))
       if (this.service.postRole(form.value))
         this.roles.push(form.value.name)

@@ -27,6 +27,10 @@ import { user } from '../../users.types';
   providers: [UsersService, RolesService]
 })
 export class FormComponent {
+  simbols = '~!@#$%^&*+-.,{}[;:?<>"_\\/\''
+  isErrorPFP = false
+  isErrorPassword = false
+
   private roles: role[] = []
   rolesName: string[] = []
   pfpNotFound = "/assets/nopfp.png"
@@ -35,7 +39,6 @@ export class FormComponent {
 
   constructor(private service: UsersService, private rolesService: RolesService) {
     this.rolesService.roles$.subscribe((roles: role[]) => {
-      console.log(roles)
       this.roles = roles
       this.rolesName = roles.map(role => role.name)
     })
@@ -48,16 +51,22 @@ export class FormComponent {
       reader.readAsDataURL(event.target.files[0]); // Read file as data url
       reader.onloadend = (e) => { // function call once readAsDataUrl is completed
         this.URL = e.target!['result']; // Set image in element
-        // this._changeDetection.markForCheck(); // Is called because ChangeDetection is set to onPush
+        this.isErrorPFP = false
       };
-    } else this.URL = this.pfpNotFound;
+    } else { this.URL = this.pfpNotFound; this.isErrorPFP = true }
   }
 
   onNew(form: NgForm) {
     const roleID = this.roles.find(role => role.name === form.value.role)?._id
     form.value.role = roleID
     form.value.profileImage = this.pfp
-    if (validateUser(form.value) && !!roleID && !!this.pfp && this.pfp.type === 'image/png') this.service.postUser(form.value)
+    console.log(form.value, validateUser(form.value))
+    if (validateUser(form.value) && !!roleID && !!this.pfp && this.pfp.type === 'image/png') {
+      this.isErrorPFP = false
+      this.isErrorPassword = false
+      this.service.postUser(form.value)
+    }
+    else { this.isErrorPFP = true; this.isErrorPassword = true }
   }
 }
 

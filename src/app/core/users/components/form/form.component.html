@@ -3,12 +3,19 @@
         <img class="object-contain w-full h-full" *ngIf="URL" [src]="URL" id="imageViewer">
     </div>
 </div>
+@if (isErrorPFP) {
+<div class="w-full text-center">
+    <span class="w-full py-2 text-[red] text-sm">La foto de perfil es obligatoria (solo archivos
+        .png)</span>
+</div>
+}
 
 <form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center" #userForm="ngForm"
     (submit)="onNew(userForm)">
     <input class="col-span-2 text-xs {{URL === pfpNotFound && 'w-[90px]'}}" type="file" accept=".png"
         name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
         (change)="useImage($event)" required ngModel>
+
     <mat-form-field class="w-full text-sm">
         <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required ngModel>
     </mat-form-field>
@@ -29,6 +36,11 @@
         <input class="w-full" matInput type="password" name="password" id="password" placeholder="Contraseña" required
             ngModel>
     </mat-form-field>
+
+    @if (isErrorPassword) {
+    <span class="col-span-2 py-2 text-[darkorange] text-sm italic">NOTA: La contraseña debe contener números, letras,
+        y los siguientes símbolos son permitidos: {{simbols}}</span>
+    }
     <div class="col-span-2 text-center">
         <button class="p-2" mat-raised-button color="primary">Guardar</button>
     </div>

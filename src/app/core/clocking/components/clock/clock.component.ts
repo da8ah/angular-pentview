@@ -11,10 +11,10 @@ import { ClockService } from '../../../../base/services/clock.service';
   providers: [ClockService]
 })
 export class ClockComponent {
-  rxTime = new Date()
+  rxTime: Date
 
-  constructor(private clock: ClockService) {
-    this.clock.start((time: Date) => {
+  constructor() {
+    ClockService.clock.subscribe((time: Date) => {
       this.rxTime = time
     })
   }
