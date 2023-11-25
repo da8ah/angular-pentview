@@ -22,10 +22,9 @@
 - Angular Router v17
 - Typescript v5
 - TailwindCSS v3
-- postgresql 15.2
 
 ## Descripción
-Pentview requiere un sistema de Control de Horas para la gestión de su personal permitiendo el registro de horas de entrada/salida y la gestión de sus usuarios con el rol respectivo de cada uno. La plataforma debe contar con controles de la autenticación y ser responsiva.
+Pentview requiere un sistema de Control de Horas para la gestión de su personal permitiendo el registro de horas de entrada/salida y la gestión de sus usuarios con el rol respectivo de cada uno. La plataforma debe contar con controles de la autenticación y debe ser responsiva.
 
 ## Resultado
 
