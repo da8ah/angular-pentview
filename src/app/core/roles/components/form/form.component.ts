@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { role } from '../../roles.types';
-import { RolesService } from '../../services/roles.service';
 import { validateRole } from '../../../../../utils/validations';
+import { role } from '../../roles.types';
 
 @Component({
   selector: 'app-form',
@@ -19,21 +18,15 @@ import { validateRole } from '../../../../../utils/validations';
     FormsModule
   ],
   templateUrl: './form.component.html',
-  styleUrl: './form.component.scss',
-  providers: [RolesService]
+  styleUrl: './form.component.scss'
 })
 export class FormComponent {
+  @Output() createRol = new EventEmitter<{ name: string }>()
   roles: role[] = []
 
-  constructor(private service: RolesService) {
-    this.service.roles$.subscribe((roles: role[]) => {
-      this.roles = roles
-    })
-  }
+  constructor() { }
 
-  onNew(form: NgForm) {
-    if (validateRole(form.value.name))
-      if (this.service.postRole(form.value))
-        this.roles.push(form.value.name)
+  onCreateRol(form: NgForm) {
+    if (validateRole(form.value.name)) this.createRol.emit(form.value)
   }
 }

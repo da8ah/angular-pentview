@@ -21,14 +21,13 @@ export class AuthService {
     AuthService.credentials = form
   }
 
-  login(form: { username: string, password: string }): Observable<boolean> {
-    return this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, form)
-      .pipe(map((res: { access_token: string }) => {
+  login(form: { username: string, password: string }) {
+    this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, form)
+      .subscribe((res: { access_token: string }) => {
         const auth = res.access_token !== undefined;
         auth && this.saveToken(res.access_token)
-        this.auth$.next(auth)
-        return auth
-      }))
+        this.isTokenSaved && this.auth$.next(auth)
+      })
   }
 
   refreshSession() {
@@ -42,6 +41,16 @@ export class AuthService {
 
   private saveToken(token: string) {
     localStorage.setItem(this.tokenName, token)
+  }
+
+  get isTokenAboutToExpire() {
+    const token = localStorage.getItem(this.tokenName)
+    if (!token) return
+
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    // console.log(`exp: ${new Date(expiry * 1000).toISOString()}\nnow: ${new Date().toISOString()}\nwin: ${(new Date(Date.now() + 1000 * 60)).toISOString()}`)
+    console.log(`exp: ${new Date(expiry * 1000).toISOString()}`)
+    return expiry * 1000 <= Date.now() + 1000 * 60;
   }
 
   logout(): void {

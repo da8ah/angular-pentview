@@ -3,8 +3,8 @@ import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { AuthService } from '../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-dialog',
@@ -22,16 +22,18 @@ import { Router } from '@angular/router';
 export class DialogComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { progress: number, seconds: number }, private router: Router, private auth: AuthService) { }
-
-  onRefreshSession() {
-    this.auth.refreshSession().subscribe(auth => {
+    @Inject(MAT_DIALOG_DATA) public data: { progress: number, countdown: number }, private router: Router, private service: AuthService) {
+    this.service.isAuth$.subscribe(auth => {
       auth && this.router.navigateByUrl('/dashboard')
     })
   }
 
+  onRefreshSession() {
+    this.service.refreshSession()
+  }
+
   onLogout() {
-    this.auth.logout()
+    this.service.logout()
     this.router.navigateByUrl('/login')
   }
 }

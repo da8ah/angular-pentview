@@ -34,16 +34,16 @@ export class LoginComponent {
   isError = false
 
   constructor(private service: AuthService, private router: Router) {
-    this.service.isAuth$.pipe(tap(auth => auth)) && this.router.navigateByUrl('/dashboard')
+    this.service.isAuth$.subscribe(auth => {
+      auth && this.router.navigateByUrl('/dashboard')
+    })
   }
 
   onLogin(form: NgForm) {
     if (validateLogin(form.value)) {
       this.isError = false
       this.service.setCredentials(form.value)
-      this.service.login(form.value).subscribe(auth => {
-        auth && this.router.navigateByUrl('/dashboard')
-      })
+      this.service.login(form.value)
     }
     else this.isError = true
   }

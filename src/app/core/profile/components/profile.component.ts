@@ -52,5 +52,4 @@ export class ProfileComponent {
     if (validateProfileUpdate(form.value as putProfile)) this.service.putProfile(form.value)
   }
 
-
 }

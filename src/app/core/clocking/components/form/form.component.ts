@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ClockingService } from '../../services/clocking.service';
 
 @Component({
   selector: 'app-form',
@@ -17,19 +16,20 @@ import { ClockingService } from '../../services/clocking.service';
     MatIconModule
   ],
   templateUrl: './form.component.html',
-  styleUrl: './form.component.scss',
-  providers: [ClockingService]
+  styleUrl: './form.component.scss'
 })
 export class FormComponent {
-  intervalId: any
+  @Input() isLatestIn: boolean
+  @Output() clockIn = new EventEmitter()
+  @Output() clockOut = new EventEmitter()
 
+  intervalId: any
   progressIn = 0
   isClockInActivated = false
-
   progressOut = 0
   isClockOutActivated = false
 
-  constructor(private service: ClockingService) { }
+  constructor() { }
 
   onProgressIn() {
     // Using Basic Interval
@@ -55,11 +55,11 @@ export class FormComponent {
   }
 
   onClockIn() {
-    if (this.progressIn >= 100) this.service.postClockIn()
+    if (this.progressIn >= 100) this.clockIn.emit()
     this.resetIn()
   }
   onClockOut() {
-    if (this.progressOut >= 100) this.service.postClockOut()
+    if (this.progressOut >= 100) this.clockOut.emit()
     this.resetOut()
   }
 

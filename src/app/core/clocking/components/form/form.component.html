@@ -7,12 +7,14 @@
         <mat-progress-bar class="py-2" mode="determinate" color="primary" [value]="progressIn"></mat-progress-bar>
         <div class="my-2 flex justify-center items-center">
             @if (!isClockInActivated) {
-            <button class="py-2 w-[100px]" mat-raised-button color="primary" (click)="onProgressIn()">Entrada</button>
+            <button class="py-2 w-[100px]" mat-raised-button color="primary" (click)="onProgressIn()"
+                [disabled]="isLatestIn">Entrada</button>
             } @else {
             <button mat-icon-button color="basic" (click)="resetIn()">
                 <mat-icon class="mr-[5px]">block</mat-icon>
             </button>
-            <button class="w-[100px]" mat-raised-button color="primary" (click)="onClockIn()">Confirmar</button>
+            <button class="w-[100px]" mat-raised-button color="primary" (click)="onClockIn()"
+                [disabled]="isLatestIn">Confirmar</button>
             }
         </div>
     </div>
@@ -27,12 +29,14 @@
         <mat-progress-bar class="py-2" mode="determinate" color="warn" [value]="progressOut"></mat-progress-bar>
         <div class="my-2 flex justify-center items-center">
             @if (!isClockOutActivated) {
-            <button class="py-2 w-[100px]" mat-raised-button color="warn" (click)="onProgressOut()">Salida</button>
+            <button class="py-2 w-[100px]" mat-raised-button color="warn" (click)="onProgressOut()"
+                [disabled]="!isLatestIn">Salida</button>
             } @else {
             <button mat-icon-button color="basic" (click)="resetOut()">
                 <mat-icon class="mr-[5px]">block</mat-icon>
             </button>
-            <button class="w-[100px]" mat-raised-button color="warn" (click)="onClockOut()">Confirmar</button>
+            <button class="w-[100px]" mat-raised-button color="warn" (click)="onClockOut()"
+                [disabled]="!isLatestIn">Confirmar</button>
             }
         </div>
     </div>

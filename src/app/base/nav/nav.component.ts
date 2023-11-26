@@ -8,12 +8,10 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
-import { CoreModule } from '../../core/core.module';
 import { profile as ProfileType } from '../../core/profile/profile.types';
 import { ProfileService } from '../../core/profile/services/profile.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ClockService } from '../services/clock.service';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -22,7 +20,6 @@ import { map } from 'rxjs';
     CommonModule,
     RouterOutlet,
     RouterModule,
-    CoreModule,
     DialogComponent,
     MatToolbarModule,
     MatSidenavModule,
@@ -51,23 +48,23 @@ export class NavComponent implements AfterViewInit {
     __v: 0
   }
 
+  // DIALOG
   dialogRef: MatDialogRef<{
     data:
     {
       progress: number,
-      seconds: number
+      countdown: number
     }
   }>;
-  timeToOpenDialog = 60 * 59;
-  dialogSteps = 60
+  isDialogMounted = false
   dialogTimeAcc = 0
+  dialogSteps = 60
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
     this.clock.start(() => {
-      this.dialogTimeAcc++;
-      if (this.dialogTimeAcc === this.timeToOpenDialog) this.openDialog();
-      if (this.dialogTimeAcc > this.timeToOpenDialog) this.updateDialog();
+      if (this.auth.isTokenAboutToExpire && !this.isDialogMounted) { this.isDialogMounted = true; this.openDialog() }
+      if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() }
     })
   }
 
@@ -82,23 +79,35 @@ export class NavComponent implements AfterViewInit {
   }
 
   updateDialog() {
-    const timer = this.dialogTimeAcc - this.timeToOpenDialog;
-    const progress = 100 - 100 * timer / this.dialogSteps;
-    const seconds = this.dialogSteps - timer;
+    const progress = 100 - 100 * this.dialogTimeAcc / this.dialogSteps;
+    const seconds = this.dialogSteps - this.dialogTimeAcc;
 
     if (this.dialogRef.componentInstance) {
       this.dialogRef.componentInstance.data.progress = progress;
-      this.dialogRef.componentInstance.data.seconds = seconds;
+      this.dialogRef.componentInstance.data.countdown = seconds;
     }
 
     if (progress <= 0) {
       this.dialogRef.close()
       this.onLogout()
       this.dialogTimeAcc = 0
+      this.isDialogMounted = false
     }
   }
 
   ngAfterViewInit(): void {
+    this.profileService.profile$.subscribe((user: ProfileType | null) => {
+      if (user) {
+        this.profile.firstName = user.firstName
+        this.profile.lastName = user.lastName
+        this.profile.role.name = user.role.name
+      }
+
+      this.initBarAnimation()
+    })
+  }
+
+  initBarAnimation() {
     this.sideNav.opened = true
     this.observer.observe(['(max-width:800px)'])
       .subscribe((res) => {
@@ -111,18 +120,13 @@ export class NavComponent implements AfterViewInit {
         }
         this.cdr.detectChanges()
       })
-
-    this.profileService.profile$.subscribe((user: ProfileType | null) => {
-      if (user) {
-        this.profile.firstName = user.firstName
-        this.profile.lastName = user.lastName
-        this.profile.role.name = user.role.name
-      }
-    })
   }
 
   get userProfile() {
-    return this.profile
+    return {
+      firstName: this.profile.firstName,
+      lastName: this.profile.lastName
+    }
   }
 
   get role() {

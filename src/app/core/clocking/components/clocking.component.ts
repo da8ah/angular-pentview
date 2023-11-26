@@ -22,10 +22,21 @@ import { TableComponent } from './table/table.component';
 export class ClockingComponent {
   displayedColumns: string[] = ['position', 'type', 'register']
   clockings: clocking[] = []
+  isLatestIn: boolean
 
   constructor(private service: ClockingService) {
     this.service.clockings$.subscribe((clockings: clocking[]) => {
-      this.clockings = clockings
+      if (clockings.length > 0) {
+        this.clockings = clockings
+        this.isLatestIn = clockings[clockings.length - 1].type === "in"
+      }
     })
+  }
+
+  clockIn() {
+    this.service.postClockIn()
+  }
+  clockOut() {
+    this.service.postClockOut()
   }
 }

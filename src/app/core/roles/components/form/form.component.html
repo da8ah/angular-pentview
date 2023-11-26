@@ -1,4 +1,4 @@
-<form class="w-full flex justify-between items-center" #roleForm="ngForm" (submit)="onNew(roleForm)">
+<form class="w-full flex justify-between items-center" #roleForm="ngForm" (submit)="onCreateRol(roleForm)">
     <mat-form-field class="w-[80%] text-sm">
         <input matInput type="text" name="name" id="name" placeholder="Rol"
             oninput="this.value = this.value.toUpperCase()" required ngModel>

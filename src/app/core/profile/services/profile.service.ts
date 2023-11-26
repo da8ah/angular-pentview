@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, delay } from 'rxjs';
 import { profile, putProfile } from '../profile.types';
 
 @Injectable({
@@ -34,8 +34,7 @@ export class ProfileService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.put(`${this.apiURL}employee-service/user/update-profile`, profile, { headers, observe: 'response' })
       .subscribe((res: any) => {
-        console.log(res)
-        console.log(res.ok)
+        if (res.ok) window.location.reload()
       })
   }
 }

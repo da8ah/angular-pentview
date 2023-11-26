@@ -1,6 +1,6 @@
 <div class="p-5 flex flex-col justify-center items-center">
     <div class="w-full md:w-[70%]">
-        <app-form class="p-2">
+        <app-form class="p-2" [isLatestIn]="isLatestIn" (clockIn)="clockIn()" (clockOut)="clockOut()">
             <app-clock></app-clock>
         </app-form>
     </div>

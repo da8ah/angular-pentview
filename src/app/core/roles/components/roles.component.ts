@@ -23,9 +23,11 @@ export class RolesComponent {
 
   constructor(private service: RolesService) {
     this.service.roles$.subscribe((roles: role[]) => {
-      if (roles.length > 0) {
-        this.roles = roles
-      }
+      if (roles.length > 0) this.roles = roles
     })
+  }
+
+  createRol(role: { name: string }) {
+    this.service.postRole(role)
   }
 }

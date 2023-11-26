@@ -34,8 +34,7 @@ export class ClockingService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'in', register: new Date().toISOString() }, { headers, observe: 'response' })
       .subscribe((res: any) => {
-        console.log(res)
-        console.log(res.ok)
+        if (res.ok) this.getClockings()
       })
   }
 
@@ -43,8 +42,7 @@ export class ClockingService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'out', register: new Date().toISOString() }, { headers, observe: 'response' })
       .subscribe((res: any) => {
-        console.log(res)
-        console.log(res.ok)
+        if (res.ok) this.getClockings()
       })
   }
 }
