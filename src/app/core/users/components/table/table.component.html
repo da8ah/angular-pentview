@@ -14,8 +14,8 @@
 
         @if (isDelete){
         <ng-container matColumnDef="actions">
-            <mat-header-cell class="justify-center" *matHeaderCellDef> Acciones </mat-header-cell>
-            <mat-cell class="justify-center" *matCellDef="let element">
+            <mat-header-cell class="justify-center min-w-max" *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell class="justify-center min-w-fit" *matCellDef="let element">
                 <button class="mx-2" mat-raised-button color="accent" (click)="onDelete(element._id)">Eliminar</button>
             </mat-cell>
         </ng-container>
@@ -24,28 +24,28 @@
         <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
         <ng-container matColumnDef="position">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+            <mat-header-cell class="min-w-max" *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+            <mat-cell class="min-w-fit" *matCellDef="let element"> {{element.position}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-            <mat-cell class="capitalize" *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-header-cell class="min-w-max" *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell class="min-w-fit capitalize" *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="last">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
-            <mat-cell class="capitalize" *matCellDef="let element"> {{element.last}} </mat-cell>
+            <mat-header-cell class="min-w-max" *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
+            <mat-cell class="min-w-fit capitalize" *matCellDef="let element"> {{element.last}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="email">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+            <mat-header-cell class="min-w-max" *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+            <mat-cell class="min-w-fit" *matCellDef="let element"> {{element.email}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="role">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.role}} </mat-cell>
+            <mat-header-cell class="min-w-max" *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
+            <mat-cell class="min-w-fit" *matCellDef="let element"> {{element.role}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
