@@ -55,17 +55,17 @@ export class NavComponent implements AfterViewInit {
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
-    if (this.auth.isTokenExpired) this.onLogout()
-    else {
-      this.clock.start(() => {
+    this.clock.start(() => {
+      if (this.auth.isTokenExpired) this.onLogout()
+      else {
         if (!this.isDialogMounted && this.auth.isTokenAboutToExpire) {
           this.isDialogMounted = true
           this.isRefreshPress = false
           this.openDialog()
         }
         if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() }
-      })
-    }
+      }
+    })
   }
 
   openDialog() {

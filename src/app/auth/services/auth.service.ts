@@ -61,10 +61,10 @@ export class AuthService {
 
   get isTokenExpired() {
     const token = localStorage.getItem(this.tokenName)
-    if (!token) return
+    if (!token) return true // Token expired
 
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    return expiry * 1000 <= Date.now();
+    return expiry * 1000 <= Date.now(); // Token time <= Now
   }
 
   get isTokenAboutToExpire() {
@@ -72,8 +72,8 @@ export class AuthService {
     if (!token) return
 
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    console.log(`exp: ${new Date(expiry * 1000).toISOString()}\nnow: ${new Date().toISOString()}\nwin: ${(new Date(Date.now() + 1000 * 60)).toISOString()}`)
-    return expiry * 1000 <= Date.now() + 1000 * 60;
+    console.log(`exp: ${new Date(expiry * 1000).toISOString()}`)
+    return expiry * 1000 <= Date.now() + 1000 * 60; // Token time <= Now +60s window
   }
 
   logout(): void {
