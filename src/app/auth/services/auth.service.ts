@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
+import CryptoJS from 'crypto-js'
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +9,10 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 export class AuthService {
   private apiURL = 'http://165.227.193.167/';
   private auth$ = new BehaviorSubject<boolean>(false)
-  private tokenName = 'PVAT' // PentView Auth Token (PVAT)
-  private static credentials: { username: string, password: string };
+  private tokenName = 'PVAT' // PentView Auth Token
+  private dumbName = 'PVDT' // PentView Dumb Token
+  private credName = 'PVUC' // PentView User Credentials
+  private secret = "Secret Passphrase"
 
   constructor(private http: HttpClient) { }
 
@@ -18,7 +21,15 @@ export class AuthService {
   }
 
   setCredentials(form: { username: string, password: string }) {
-    AuthService.credentials = form
+    const header = btoa(JSON.stringify({
+      "alg": "HS256",
+      "typ": "JWT"
+    }))
+    const cred = CryptoJS.AES.encrypt(JSON.stringify(form), this.secret).toString()
+    const body = btoa(JSON.stringify({ [this.credName as string]: cred })).replace(/=+$/, '')
+    const hash = btoa(CryptoJS.HmacSHA256(`${header}.${body}`, this.secret).toString()).replace(/=+$/, '')
+    const token = `${header}.${body}.${hash}`
+    localStorage.setItem(this.dumbName, token)
   }
 
   login(form: { username: string, password: string }) {
@@ -26,21 +37,34 @@ export class AuthService {
       .subscribe((res: { access_token: string }) => {
         const auth = res.access_token !== undefined;
         auth && this.saveToken(res.access_token)
-        this.isTokenSaved && this.auth$.next(auth)
+        if (this.isTokenSaved) { this.setCredentials(form); this.auth$.next(auth) }
       })
   }
 
   refreshSession() {
-    localStorage.removeItem(this.tokenName)
-    return this.login(AuthService.credentials)
+    const token = localStorage.getItem(this.dumbName)
+    if (!token) return
+
+    const cred = (JSON.parse(atob(token.split('.')[1])))[this.credName]
+    const form = JSON.parse(CryptoJS.AES.decrypt(cred, this.secret).toString(CryptoJS.enc.Utf8))
+    return this.login(form)
+  }
+
+
+  private saveToken(token: string) {
+    localStorage.setItem(this.tokenName, token)
   }
 
   get isTokenSaved() {
     return !!localStorage.getItem(this.tokenName)
   }
 
-  private saveToken(token: string) {
-    localStorage.setItem(this.tokenName, token)
+  get isTokenExpired() {
+    const token = localStorage.getItem(this.tokenName)
+    if (!token) return
+
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    return expiry * 1000 <= Date.now();
   }
 
   get isTokenAboutToExpire() {
@@ -48,13 +72,13 @@ export class AuthService {
     if (!token) return
 
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    // console.log(`exp: ${new Date(expiry * 1000).toISOString()}\nnow: ${new Date().toISOString()}\nwin: ${(new Date(Date.now() + 1000 * 60)).toISOString()}`)
-    console.log(`exp: ${new Date(expiry * 1000).toISOString()}`)
+    console.log(`exp: ${new Date(expiry * 1000).toISOString()}\nnow: ${new Date().toISOString()}\nwin: ${(new Date(Date.now() + 1000 * 60)).toISOString()}`)
     return expiry * 1000 <= Date.now() + 1000 * 60;
   }
 
   logout(): void {
     localStorage.removeItem(this.tokenName)
+    localStorage.removeItem(this.dumbName)
     this.auth$.next(false)
   }
 }

@@ -5,6 +5,7 @@ import { ClockingComponent } from './core/clocking/components/clocking.component
 import { ProfileComponent } from './core/profile/components/profile.component';
 import { RolesComponent } from './core/roles/components/roles.component';
 import { UsersComponent } from './core/users/components/users.component';
+import { roleGuard } from './auth/guards/role.guard';
 
 
 export const routes: Routes = [
@@ -17,8 +18,8 @@ export const routes: Routes = [
         children: [
             { path: 'clocking', component: ClockingComponent },
             { path: 'profile', component: ProfileComponent },
-            { path: 'roles', component: RolesComponent },
-            { path: 'users', component: UsersComponent },
+            { canActivate: [roleGuard], path: 'roles', component: RolesComponent },
+            { canActivate: [roleGuard], path: 'users', component: UsersComponent },
             { path: '', redirectTo: 'clocking', pathMatch: 'full' }
         ]
     },

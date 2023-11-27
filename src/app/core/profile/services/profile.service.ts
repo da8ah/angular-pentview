@@ -7,19 +7,26 @@ import { profile, putProfile } from '../profile.types';
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiURL = 'http://165.227.193.167/';
-  private profile = new BehaviorSubject<profile | null>(null);
+  private apiURL = 'http://165.227.193.167/'
+  private profile = new BehaviorSubject<profile | null>(null)
 
   constructor(private http: HttpClient) {
     if (!this.profile.value) this.loadProfile()
+  }
+
+  private get token() {
+    return localStorage.getItem('PVAT')
   }
 
   get profile$() {
     return this.profile.asObservable()
   }
 
-  private get token() {
-    return localStorage.getItem('PVAT')
+  get role() {
+    const token = localStorage.getItem('PVAT')
+    if (!token) return null
+
+    return (JSON.parse(atob(token.split('.')[1]))).authority.toLowerCase()
   }
 
   private loadProfile() {

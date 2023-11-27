@@ -22,14 +22,14 @@ import { AuthService } from '../../auth/services/auth.service';
 export class DialogComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { progress: number, countdown: number }, private router: Router, private service: AuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: { progress: number, countdown: number, isRefresh: boolean }, private router: Router, private service: AuthService) {
     this.service.isAuth$.subscribe(auth => {
       auth && this.router.navigateByUrl('/dashboard')
     })
   }
 
   onRefreshSession() {
-    this.service.refreshSession()
+    this.data.isRefresh = true
   }
 
   onLogout() {

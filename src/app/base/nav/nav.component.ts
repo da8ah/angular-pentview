@@ -12,6 +12,7 @@ import { profile as ProfileType } from '../../core/profile/profile.types';
 import { ProfileService } from '../../core/profile/services/profile.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ClockService } from '../services/clock.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -38,56 +39,57 @@ export class NavComponent implements AfterViewInit {
     email: '',
     firstName: '',
     lastName: '',
-    role: {
-      _id: '',
-      name: '',
-      createdAt: '',
-      __v: 0
-    },
+    role: { _id: '', name: '', createdAt: '', __v: 0 },
     createdAt: '',
     __v: 0
   }
 
   // DIALOG
   dialogRef: MatDialogRef<{
-    data:
-    {
-      progress: number,
-      countdown: number
-    }
+    data: { progress: number, countdown: number, isRefresh: boolean }
   }>;
   isDialogMounted = false
+  isRefreshPress = false
   dialogTimeAcc = 0
   dialogSteps = 60
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
-    this.clock.start(() => {
-      if (this.auth.isTokenAboutToExpire && !this.isDialogMounted) { this.isDialogMounted = true; this.openDialog() }
-      if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() }
-    })
+    if (this.auth.isTokenExpired) this.onLogout()
+    else {
+      this.clock.start(() => {
+        if (!this.isDialogMounted && this.auth.isTokenAboutToExpire) {
+          this.isDialogMounted = true
+          this.isRefreshPress = false
+          this.openDialog()
+        }
+        if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() }
+      })
+    }
   }
 
   openDialog() {
     this.dialogRef = this.dialog.open(DialogComponent, {
-      data:
-      {
-        progress: 100,
-        seconds: this.dialogSteps
-      },
+      data: { progress: 100, seconds: this.dialogSteps, isRefresh: false }
     });
   }
 
   updateDialog() {
     const progress = 100 - 100 * this.dialogTimeAcc / this.dialogSteps;
-    const seconds = this.dialogSteps - this.dialogTimeAcc;
+    const countdown = this.dialogSteps - this.dialogTimeAcc;
 
     if (this.dialogRef.componentInstance) {
+      if (this.dialogRef.componentInstance.data.isRefresh) this.isRefreshPress = true;
       this.dialogRef.componentInstance.data.progress = progress;
-      this.dialogRef.componentInstance.data.countdown = seconds;
+      this.dialogRef.componentInstance.data.countdown = countdown;
     }
 
-    if (progress <= 0) {
+    if (this.isRefreshPress) {
+      this.dialogRef.close()
+      this.onRefreshSession()
+      this.dialogTimeAcc = 0
+      this.isDialogMounted = false
+    } else if (progress <= 0) {
       this.dialogRef.close()
       this.onLogout()
       this.dialogTimeAcc = 0
@@ -96,14 +98,13 @@ export class NavComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.profileService.profile$.subscribe((user: ProfileType | null) => {
+    this.profileService.profile$.pipe(delay(500)).subscribe((user: ProfileType | null) => {
+      this.initBarAnimation()
       if (user) {
         this.profile.firstName = user.firstName
         this.profile.lastName = user.lastName
         this.profile.role.name = user.role.name
       }
-
-      this.initBarAnimation()
     })
   }
 
@@ -131,6 +132,11 @@ export class NavComponent implements AfterViewInit {
 
   get role() {
     return this.profile.role.name.toLowerCase()
+  }
+
+
+  onRefreshSession() {
+    this.auth.refreshSession()
   }
 
   onLogout() {
