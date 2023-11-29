@@ -26,9 +26,7 @@ export class ClockService implements OnDestroy {
   }
 
   ngOnDestroy() {
-    clearInterval(this.intervalId);
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    clearInterval(this.intervalId)
+    if (this.subscription) this.subscription.unsubscribe()
   }
 }

@@ -22,6 +22,7 @@ export class NotFoundComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.clock.subscription.unsubscribe()
+    clearInterval(this.clock.intervalId)
+    if (this.clock.subscription) this.clock.subscription.unsubscribe()
   }
 }

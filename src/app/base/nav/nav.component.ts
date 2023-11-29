@@ -56,6 +56,7 @@ export class NavComponent implements AfterViewInit {
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
+    console.log(`exp: ${new Date(this.auth.tokenExpiry).toString()}`)
     this.clock.start(() => { // Starts Global Clock
       if (this.auth.isTokenExpired) this.onLogout() // Checks if session expired
       else {
