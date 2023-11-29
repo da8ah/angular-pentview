@@ -1,4 +1,4 @@
-<div class="w-full flex justify-between items-center">
+<div class="min-w-fit w-full flex justify-between items-center">
     @if (dataSource.data.length > 5){
     <mat-form-field class="w-full p-0 m-0 border-spacing-0 border-[0] ring-0 text-sm">
         <input class="w-full" #inputFilter matInput (keyup)="applyFilter(inputFilter.value)" placeholder="Filter">
@@ -6,7 +6,7 @@
     }
 </div>
 
-<div class="w-full text-black">
+<div class="min-w-fit flex flex-col overflow-x-auto text-black">
     <mat-table #table [dataSource]="dataSource" matSort matSortActive="position" matSortDisableClear
         matSortDirection="desc">
 

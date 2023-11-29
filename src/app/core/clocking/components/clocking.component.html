@@ -1,10 +1,10 @@
-<div class="p-5 flex flex-col justify-center items-center">
+<div class="overflow-x-auto p-5 flex flex-col justify-center items-center">
     <div class="w-full md:w-[70%]">
         <app-form class="p-2" [isLatestIn]="isLatestIn" (clockIn)="clockIn()" (clockOut)="clockOut()">
-            <app-clock></app-clock>
+            <app-clock class="px-[5px]"></app-clock>
         </app-form>
     </div>
-    <div class="w-full">
+    <div class="w-full md:w-[70%]">
         <app-table [displayedColumns]="displayedColumns" [clockings]="clockings"></app-table>
     </div>
 </div>

@@ -44,7 +44,8 @@ export class NavComponent implements AfterViewInit {
     __v: 0
   }
 
-  // DIALOG
+
+  // CLOCK, AUTH & DIALOG
   dialogRef: MatDialogRef<{
     data: { progress: number, countdown: number, isRefresh: boolean }
   }>;
@@ -55,41 +56,41 @@ export class NavComponent implements AfterViewInit {
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
-    this.clock.start(() => {
-      if (this.auth.isTokenExpired) this.onLogout()
+    this.clock.start(() => { // Starts Global Clock
+      if (this.auth.isTokenExpired) this.onLogout() // Checks if session expired
       else {
-        if (!this.isDialogMounted && this.auth.isTokenAboutToExpire) {
-          this.isDialogMounted = true
-          this.isRefreshPress = false
+        if (!this.isDialogMounted && this.auth.isTokenAboutToExpire) { // If session it's about to expire mounts Dialog
+          this.isDialogMounted = true // Dialog mounted flag
+          this.isRefreshPress = false // Persistir/RefreshSession flag
           this.openDialog()
         }
-        if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() }
+        if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() } // If Dialog it's already mounted
       }
     })
   }
 
-  openDialog() {
+  openDialog() { // Open/Mounts Dialog
     this.dialogRef = this.dialog.open(DialogComponent, {
       data: { progress: 100, seconds: this.dialogSteps, isRefresh: false }
     });
   }
 
-  updateDialog() {
+  updateDialog() { // Rerenders Dialog every second
     const progress = 100 - 100 * this.dialogTimeAcc / this.dialogSteps;
     const countdown = this.dialogSteps - this.dialogTimeAcc;
 
-    if (this.dialogRef.componentInstance) {
+    if (this.dialogRef.componentInstance) { // If Dialog is Open/Mount
       if (this.dialogRef.componentInstance.data.isRefresh) this.isRefreshPress = true;
       this.dialogRef.componentInstance.data.progress = progress;
       this.dialogRef.componentInstance.data.countdown = countdown;
     }
 
-    if (this.isRefreshPress) {
+    if (this.isRefreshPress) { // If Persistir/RefreshSession button it's pressed
       this.dialogRef.close()
       this.onRefreshSession()
       this.dialogTimeAcc = 0
       this.isDialogMounted = false
-    } else if (progress <= 0) {
+    } else if (progress <= 0) { // If Dialog it's closed without action
       this.dialogRef.close()
       this.onLogout()
       this.dialogTimeAcc = 0
@@ -97,6 +98,8 @@ export class NavComponent implements AfterViewInit {
     }
   }
 
+
+  // SIDENAV ANIMATION & PROFILE
   ngAfterViewInit(): void {
     this.profileService.profile$.pipe(delay(500)).subscribe((user: ProfileType | null) => {
       this.initBarAnimation()
