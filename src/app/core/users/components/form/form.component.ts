@@ -1,21 +1,28 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { UsersService } from '../../services/users.service';
-import { NgForm, FormsModule } from '@angular/forms';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition
+} from '@angular/material/snack-bar';
 import { validateUser } from '../../../../../utils/validations';
-import { RolesService } from '../../../roles/services/roles.service';
+import { SnackbarComponent } from '../../../../base/snackbar/snackbar.component';
 import { role } from '../../../roles/roles.types';
-import { user } from '../../users.types';
+import { RolesService } from '../../../roles/services/roles.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-form',
   standalone: true,
   imports: [
     CommonModule,
+    SnackbarComponent,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -27,20 +34,24 @@ import { user } from '../../users.types';
   providers: [UsersService, RolesService]
 })
 export class FormComponent {
-  simbols = '~!@#$%^&*+-.,{}[;:?<>"_\\/\''
+  snackBarRef: MatSnackBarRef<{
+    data: { status: number, message: string }
+  }>;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+  simbols = "~!@#$ %^&* +\-/.,\\{ }[\\;:?<>\"'_"
   isErrorPFP = false
   isErrorPassword = false
 
-  private roles: role[] = []
-  rolesName: string[] = []
+  roles: { id: string, name: string }[] = []
   pfpNotFound = "/assets/nopfp.png"
   URL: any = this.pfpNotFound
   pfp: any
 
-  constructor(private service: UsersService, private rolesService: RolesService) {
+  constructor(private snackBar: MatSnackBar, private service: UsersService, private rolesService: RolesService) {
     this.rolesService.roles$.subscribe((roles: role[]) => {
-      this.roles = roles
-      this.rolesName = roles.map(role => role.name)
+      this.roles = roles.map(role => ({ id: role._id, name: role.name }))
     })
   }
 
@@ -56,31 +67,26 @@ export class FormComponent {
     } else { this.URL = this.pfpNotFound; this.isErrorPFP = true }
   }
 
-  onNew(form: NgForm) {
-    const roleID = this.roles.find(role => role.name === form.value.role)?._id
-    form.value.role = roleID
-    form.value.profileImage = this.pfp
-    console.log(form.value, validateUser(form.value))
-    if (validateUser(form.value) && !!roleID && !!this.pfp && this.pfp.type === 'image/png') {
-      this.isErrorPFP = false
-      this.isErrorPassword = false
-      this.service.postUser(form.value)
-    }
-    else { this.isErrorPFP = true; this.isErrorPassword = true }
-  }
-}
+  onSave(form: NgForm) {
+    // Validation
+    this.isErrorPFP = !this.pfp || this.pfp.type !== 'image/png'
+    this.isErrorPassword = !validateUser(form.value)
+    if (this.isErrorPFP || this.isErrorPassword) return
 
-function generarContrasena(regex: RegExp): string {
-  while (true) {
-    const contrasena = Array.from(
-      { length: 16 },
-      () =>
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*+-/.,\\{};:?<>"\'_'[
-        Math.floor(Math.random() * 72)
-        ]
-    ).join('');
-    if (regex.test(contrasena)) {
-      return contrasena;
-    }
+    // HTTP Request
+    form.value.profileImage = this.pfp
+    this.service.postUser(form.value).subscribe({
+      next: (res) => { if (res.ok) console.log('registrado') },
+      error: (error) => { this.openSnackBar(error.status, error.statusText) }
+    })
+  }
+
+  openSnackBar(status: number, message: string) {
+    this.snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { status, message },
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration: 5 * 1000
+    })
   }
 }

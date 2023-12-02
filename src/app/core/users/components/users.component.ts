@@ -31,11 +31,11 @@ export class UsersComponent {
   isDelete: boolean = false
 
   constructor(private service: UsersService) {
-    this.service.users$.subscribe((users: user[]) => {
-      if (users.length > 0) {
-        users.splice(0, 1) // Admin Admin
-        this.users = users
-      }
+    if (this.users.length === 0) this.service.getUsers().subscribe((res: any) => {
+      if (res.ok && res.body.length > 0) {
+        res.body.splice(0, 1) // Admin Admin
+        this.users = res.body as user[]
+      } else console.log(res)
     })
   }
 

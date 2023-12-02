@@ -11,7 +11,7 @@
 }
 
 <form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center" #userForm="ngForm"
-    (submit)="onNew(userForm)">
+    (submit)="onSave(userForm)">
     <input class="col-span-2 text-xs {{URL === pfpNotFound && 'w-[90px]'}}" type="file" accept=".png"
         name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
         (change)="useImage($event)" required ngModel>
@@ -27,19 +27,20 @@
     </mat-form-field>
     <mat-form-field class="w-full">
         <mat-select class="w-full" name="role" id="role" placeholder="Rol" required ngModel>
-            <ng-container *ngFor="let item of rolesName">
-                <mat-option value="{{item}}">{{item}}</mat-option>
+            <ng-container *ngFor="let item of roles">
+                <mat-option value="{{item.id}}">{{item.name}}</mat-option>
             </ng-container>
         </mat-select>
     </mat-form-field>
     <mat-form-field class="col-span-2 w-full text-sm">
-        <input class="w-full" matInput type="password" name="password" id="password" placeholder="Contraseña" required
+        <input class="flex-1" matInput type="password" name="password" id="password" placeholder="Contraseña" required
             ngModel>
     </mat-form-field>
 
     @if (isErrorPassword) {
-    <span class="col-span-2 py-2 text-[darkorange] text-sm italic">NOTA: La contraseña debe contener números, letras,
-        y los siguientes símbolos son permitidos: {{simbols}}</span>
+    <span class="col-span-2 py-2 text-[darkorange] text-sm italic">Contraseña: mínima longitud de 8 caracteres, debe
+        contener números, letras,
+        y al menos 1 de los siguientes símbolos: {{simbols}}</span>
     }
     <div class="col-span-2 text-center">
         <button class="p-2" mat-raised-button color="primary">Guardar</button>

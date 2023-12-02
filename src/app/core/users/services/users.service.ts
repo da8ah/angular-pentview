@@ -10,9 +10,7 @@ export class UsersService {
   private apiURL = 'http://165.227.193.167/';
   private users = new BehaviorSubject<user[]>([])
 
-  constructor(private http: HttpClient) {
-    if (this.users.value.length === 0) this.getUsers()
-  }
+  constructor(private http: HttpClient) { }
 
   get users$() {
     return this.users.asObservable()
@@ -24,19 +22,12 @@ export class UsersService {
 
   getUsers() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.get(`${this.apiURL}employee-service/user/list`, { headers })
-      .subscribe((res: any) => {
-        this.users.next(res as user[])
-      })
+    return this.http.get(`${this.apiURL}employee-service/user/list`, { headers, observe: 'response' })
   }
 
   postUser(user: user) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/user`, user, { headers, observe: 'response' })
-      .subscribe((res: any) => {
-        console.log(res)
-        console.log(res.ok)
-      })
+    return this.http.post(`${this.apiURL}employee-service/user`, user, { headers, observe: 'response' })
   }
 
   deleteUser(user: user) {

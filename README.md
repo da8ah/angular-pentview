@@ -80,6 +80,19 @@ Arquitectura de la aplicación:
 <img style="width:70%" src="./doc/newuser.png" >
 </div>
 
+### Campos Requeridos
+
+<div align="center">
+<img style="width:70%" src="./doc/required.png" >
+</div>
+
+### Control de Errores HTTP
+
+<div align="center">
+<img style="width:70%" src="./doc/status.png" >
+</div>
+<br/>
+
 ### Eliminar Usuario
 
 <div align="center">

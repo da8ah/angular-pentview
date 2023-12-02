@@ -1,0 +1,11 @@
+<span class="flex justify-center items-center">
+    <span matSnackBarLabel>
+        <span class="mr-2 font-bold text-[red]">
+            {{data.status}}
+        </span>
+        {{data.message}}
+    </span>
+    <span matSnackBarActions>
+        <button mat-button matSnackBarAction color="warn" (click)="snackBarRef.dismissWithAction()">OK</button>
+    </span>
+</span>

@@ -29,8 +29,6 @@ export class FormComponent {
   progressOut = 0
   isClockOutActivated = false
 
-  constructor() { }
-
   onProgressIn() {
     // Using Basic Interval
     this.intervalId = setInterval(() => {
