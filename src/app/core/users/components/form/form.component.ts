@@ -11,7 +11,7 @@ import {
   MatSnackBarRef,
   MatSnackBarVerticalPosition
 } from '@angular/material/snack-bar';
-import { validateUser } from '../../../../../utils/validations';
+import { patterns, validateUser } from '../../../../../utils/validations';
 import { SnackbarComponent } from '../../../../base/snackbar/snackbar.component';
 import { role } from '../../../roles/roles.types';
 import { RolesService } from '../../../roles/services/roles.service';
@@ -40,7 +40,8 @@ export class FormComponent {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  simbols = "~!@#$ %^&* +\-/.,\\{ }[\\;:?<>\"'_"
+  readonly patterns = patterns
+  simbols = patterns.User.PASSSIMB
   isErrorPFP = false
   isErrorPassword = false
 

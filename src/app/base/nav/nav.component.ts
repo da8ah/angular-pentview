@@ -7,12 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { delay } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 import { profile as ProfileType } from '../../core/profile/profile.types';
 import { ProfileService } from '../../core/profile/services/profile.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ClockService } from '../services/clock.service';
-import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -141,6 +141,7 @@ export class NavComponent implements AfterViewInit {
 
   onRefreshSession() {
     this.auth.refreshSession()
+    window.location.reload()
   }
 
   onLogout() {

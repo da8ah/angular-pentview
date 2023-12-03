@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { tap } from 'rxjs';
-import { validateLogin } from '../../../../utils/validations';
-import { AuthService } from '../../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { Router } from '@angular/router';
+import { patterns, validateLogin } from '../../../../utils/validations';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +29,8 @@ import { MatInputModule } from '@angular/material/input';
   providers: [AuthService]
 })
 export class LoginComponent {
-  simbols = '~!@#$%^&*+-.,{}[;:?<>"_\\/\''
+  readonly patterns = patterns
+  simbols = patterns.User.PASSSIMB
   isError = false
 
   constructor(private service: AuthService, private router: Router) {

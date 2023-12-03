@@ -15,12 +15,12 @@
                     ngModel>
             </mat-form-field>
             <mat-form-field class="w-full text-sm">
-                <input class="w-full" matInput type="password" name="password" id="password" placeholder="Contraseña"
-                    required ngModel>
+                <input class="w-full ng-pristine" matInput type="password" name="password" id="password"
+                    placeholder="Contraseña" required [pattern]="patterns.User.PASSWORD" ngModel>
             </mat-form-field>
             @if (isError) {
-            <span class="py-2 text-[red] text-sm">Credenciales incorrectas, la contraseña debe contener números, letras,
-                y los siguientes símbolos son permitidos: {{simbols}}</span>
+            <span class="py-2 text-[red] text-sm">Credenciales incorrectas, Contraseña: mínima longitud de 8 caracteres,
+                debe contener números, letras, y al menos 1 de los siguientes símbolos: {{simbols}}</span>
             }
             <button class="w-full" mat-raised-button color="primary" type="submit">Iniciar Sesión</button>
         </form>

@@ -10,20 +10,24 @@
 </div>
 }
 
-<form class="grid grid-rows-5 grid-cols-2 gap-4 justify-center items-center justify-items-center" #userForm="ngForm"
-    (submit)="onSave(userForm)">
+<form
+    class="grid grid-rows-{{isErrorPassword ? 6 : 5}} grid-cols-2 gap-4 justify-center items-center justify-items-center"
+    #userForm="ngForm" (submit)="onSave(userForm)">
     <input class="col-span-2 text-xs {{URL === pfpNotFound && 'w-[90px]'}}" type="file" accept=".png"
         name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
         (change)="useImage($event)" required ngModel>
 
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required ngModel>
+        <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required
+            [pattern]="patterns.User.NAME" ngModel>
     </mat-form-field>
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="lastName" id="lastName" placeholder="Apellido" required ngModel>
+        <input matInput type="text" name="lastName" id="lastName" placeholder="Apellido" required
+            [pattern]="patterns.User.LAST" ngModel>
     </mat-form-field>
     <mat-form-field class="w-full text-sm">
-        <input matInput type="text" name="email" id="email" placeholder="Email" required ngModel>
+        <input matInput type="text" name="email" id="email" placeholder="Email" required [pattern]="patterns.User.EMAIL"
+            ngModel>
     </mat-form-field>
     <mat-form-field class="w-full">
         <mat-select class="w-full" name="role" id="role" placeholder="Rol" required ngModel>
@@ -34,7 +38,7 @@
     </mat-form-field>
     <mat-form-field class="col-span-2 w-full text-sm">
         <input class="flex-1" matInput type="password" name="password" id="password" placeholder="Contraseña" required
-            ngModel>
+            [pattern]="patterns.User.PASSWORD" ngModel>
     </mat-form-field>
 
     @if (isErrorPassword) {
@@ -42,7 +46,9 @@
         contener números, letras,
         y al menos 1 de los siguientes símbolos: {{simbols}}</span>
     }
-    <div class="col-span-2 text-center">
-        <button class="p-2" mat-raised-button color="primary">Guardar</button>
-    </div>
+    <span class="col-span-2 w-1/3">
+        <div class="w-full text-center">
+            <button class="w-full p-2" mat-raised-button color="primary">Guardar</button>
+        </div>
+    </span>
 </form>
