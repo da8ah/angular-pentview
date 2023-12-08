@@ -124,6 +124,7 @@ Arquitectura de la aplicación:
 ## Mejoras Futuras
 
 - [ ] Validación mejorada de formularios
+- [ ] Cierre de sesión basada en IDLE
 - [ ] Diseño mejorado
 - [ ] Testing
 
