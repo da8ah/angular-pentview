@@ -1,7 +1,7 @@
 <form class="w-full flex justify-between items-center" #roleForm="ngForm" (submit)="onCreateRol(roleForm)">
     <mat-form-field class="w-[80%] text-sm">
         <input matInput type="text" name="name" id="name" placeholder="Rol"
-            oninput="this.value = this.value.toUpperCase()" required ngModel>
+            oninput="this.value = this.value.toUpperCase()" required [pattern]="patterns.Role.NAME" ngModel>
     </mat-form-field>
     <div class="text-center">
         <button mat-raised-button color="primary">Agregar</button>

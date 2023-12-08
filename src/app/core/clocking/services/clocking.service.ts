@@ -32,17 +32,11 @@ export class ClockingService {
 
   postClockIn() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'in', register: new Date().toISOString() }, { headers, observe: 'response' })
-      .subscribe((res: any) => {
-        if (res.ok) this.getClockings()
-      })
+    return this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'in', register: new Date().toISOString() }, { headers, observe: 'response' })
   }
 
   postClockOut() {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'out', register: new Date().toISOString() }, { headers, observe: 'response' })
-      .subscribe((res: any) => {
-        if (res.ok) this.getClockings()
-      })
+    return this.http.post(`${this.apiURL}employee-service/hour-register`, { type: 'out', register: new Date().toISOString() }, { headers, observe: 'response' })
   }
 }

@@ -1,11 +1,28 @@
 <span class="flex justify-center items-center">
-    <span matSnackBarLabel>
-        <span class="mr-2 font-bold text-[red]">
-            {{data.status}}
+    <span class="capitalize" matSnackBarLabel>
+        @switch (data.status.toString().charAt(0)) {
+        @case ('2') {
+        <span class="mr-2 text-xl">
+            👌
         </span>
         {{data.message}}
+        }
+        @default{
+        <span class="mr-2 font-bold text-[red]">
+            ERROR
+        </span>
+        {{data.message}}
+        }
+        }
     </span>
     <span matSnackBarActions>
+        @switch (data.status.toString().charAt(0)) {
+        @case ('2') {
+        <button mat-flat-button matSnackBarAction color="primary" (click)="snackBarRef.dismissWithAction()">OK</button>
+        }
+        @default{
         <button mat-button matSnackBarAction color="warn" (click)="snackBarRef.dismissWithAction()">OK</button>
+        }
+        }
     </span>
 </span>

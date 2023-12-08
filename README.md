@@ -4,7 +4,10 @@
 - [x] Acceso a todas las rutas con Bearer token (excepto Login)
 - [x] Módulos para el rol de Administrador: PERFIL, HORARIO, ROLES y USUARIOS
 - [x] Módulos para otros roles: PERFIL y HORARIO
-- [x] El Administrador en el módulo de USUARIOS puede: CREAR, LISTAR y ELIMINAR
+- [ ] El Administrador en el módulo de USUARIOS puede: CREAR, LISTAR y ELIMINAR
+    - [x] CREAR: diseño y validación del formulario (sin funcionalidad)
+    - [x] LISTAR: diseño e implementación de funcionalidad
+    - [x] ELIMINAR: diseño del botón de acción (sin funcionalidad)
 - [x] Todos los usuarios pueden actualizar sus datos en el módulo PERFIL
 - [x] Todos los usuarios pueden registrar ENTRADA/SALIDA en el módulo HORARIO
 - [x] Se debe mostrar una notificación de caducidad de sesión al usuario (60s):
@@ -118,7 +121,21 @@ Arquitectura de la aplicación:
 <br/>
 <br/>
 
+## Mejoras Futuras
+
+- [ ] Validación mejorada de formularios
+- [ ] Diseño mejorado
+- [ ] Testing
+
 ## Versionamiento
+
+(Tiber) **Diciembre 2023 v0.13**
+
+* Depuración y actualización de comentarios
+* Formularios con patrones de validación
+* Notificación de acciones
+* Reloj en formato 24h
+* Actualización de README
 
 (Tiber) **Noviembre 2023 v0.11**
 

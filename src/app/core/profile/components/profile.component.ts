@@ -4,7 +4,14 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition
+} from '@angular/material/snack-bar';
 import { validateProfileUpdate } from '../../../../utils/validations';
+import { SnackbarComponent } from '../../../base/snackbar/snackbar.component';
 import { profile as ProfileType, putProfile } from '../profile.types';
 import { ProfileService } from '../services/profile.service';
 
@@ -23,6 +30,13 @@ import { ProfileService } from '../services/profile.service';
   providers: [ProfileService]
 })
 export class ProfileComponent {
+  // SnackBar
+  snackBarRef: MatSnackBarRef<{
+    data: { status: number, message: string }
+  }>;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
   protected profile: ProfileType = {
     _id: '',
     email: '',
@@ -38,7 +52,7 @@ export class ProfileComponent {
     __v: 0
   }
 
-  constructor(private srvProfile: ProfileService) {
+  constructor(private snackBar: MatSnackBar, private srvProfile: ProfileService) {
     this.srvProfile.profile$.subscribe((profile: ProfileType | null) => {
       if (profile) this.profile = profile
     })
@@ -49,6 +63,18 @@ export class ProfileComponent {
   }
 
   onUpdate(form: NgForm) {
-    if (validateProfileUpdate(form.value as putProfile)) this.srvProfile.putProfile(form.value)
+    if (validateProfileUpdate(form.value as putProfile)) this.srvProfile.putProfile(form.value).subscribe({
+      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, "Perfil actualizado"); window.location.reload() } },
+      error: (error) => { this.openSnackBar(error.status, error.error.message) }
+    })
+  }
+
+  openSnackBar(status: number, message: string) {
+    this.snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { status, message },
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration: 5 * 1000
+    })
   }
 }

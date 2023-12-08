@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition
+} from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../../../base/snackbar/snackbar.component';
 import { clocking } from '../clocking.types';
 import { ClockingService } from '../services/clocking.service';
 import { ClockComponent } from './clock/clock.component';
@@ -20,12 +27,19 @@ import { TableComponent } from './table/table.component';
   providers: [ClockingService]
 })
 export class ClockingComponent {
+  // SnackBar
+  snackBarRef: MatSnackBarRef<{
+    data: { status: number, message: string }
+  }>;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
   displayedColumns: string[] = ['position', 'type', 'register']
   clockings: clocking[] = []
   isLatestIn: boolean
 
-  constructor(private service: ClockingService) {
-    this.service.clockings$.subscribe((clockings: clocking[]) => {
+  constructor(private snackBar: MatSnackBar, private srvClocking: ClockingService) {
+    this.srvClocking.clockings$.subscribe((clockings: clocking[]) => {
       if (clockings.length > 0) {
         this.clockings = clockings
         this.isLatestIn = clockings[clockings.length - 1].type === "in"
@@ -34,9 +48,24 @@ export class ClockingComponent {
   }
 
   clockIn() {
-    this.service.postClockIn()
+    this.srvClocking.postClockIn().subscribe({
+      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, res.body.message); this.srvClocking.getClockings() } },
+      error: (error) => { this.openSnackBar(error.status, error.error.message) }
+    })
   }
   clockOut() {
-    this.service.postClockOut()
+    this.srvClocking.postClockOut().subscribe({
+      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, res.body.message); this.srvClocking.getClockings() } },
+      error: (error) => { this.openSnackBar(error.status, error.error.message) }
+    })
+  }
+
+  openSnackBar(status: number, message: string) {
+    this.snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { status, message },
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration: 5 * 1000
+    })
   }
 }

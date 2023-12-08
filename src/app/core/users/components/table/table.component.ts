@@ -4,8 +4,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarRef,
+  MatSnackBarVerticalPosition
+} from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { SnackbarComponent } from '../../../../base/snackbar/snackbar.component';
 import { UsersService } from '../../services/users.service';
 import { tableItem, user } from '../../users.types';
 
@@ -41,11 +48,29 @@ export class TableComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor(private service: UsersService) { }
+  // SnackBar
+  snackBarRef: MatSnackBarRef<{
+    data: { status: number, message: string }
+  }>;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  constructor(private snackBar: MatSnackBar, private srvUsers: UsersService) { }
 
   onDelete(id: string) {
     const user = this.users.find(user => user._id === id)
-    if (!!user) this.service.deleteUser(user)
+    if (!!user) this.srvUsers.deleteUser(user).subscribe({
+      next: (res: any) => { if (res.ok) console.log('eliminado'); this.openSnackBar(res.status, res.body.message); this.srvUsers.getUsers() },
+      error: (error) => { console.log(error); this.openSnackBar(error.status, error.error.message) }
+    })
+  }
+
+  openSnackBar(status: number, message: string) {
+    this.snackBarRef = this.snackBar.openFromComponent(SnackbarComponent, {
+      data: { status, message },
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration: 5 * 1000
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {

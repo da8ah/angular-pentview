@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { user } from '../users.types';
 
 @Injectable({
@@ -32,9 +32,6 @@ export class UsersService {
 
   deleteUser(user: user) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.delete(`${this.apiURL}employee-service/user/${user._id}`, { headers })
-      .subscribe((res: any) => {
-        console.log(res)
-      })
+    return this.http.delete(`${this.apiURL}employee-service/user/${user._id}`, { headers, observe: 'response' })
   }
 }

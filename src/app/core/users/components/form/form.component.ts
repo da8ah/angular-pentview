@@ -77,8 +77,8 @@ export class FormComponent {
     // HTTP Request
     form.value.profileImage = this.pfp
     this.srvUsers.postUser(form.value).subscribe({
-      next: (res) => { if (res.ok) console.log('registrado') },
-      error: (error) => { this.openSnackBar(error.status, error.statusText) }
+      next: (res: any) => { if (res.ok) console.log('registrado'); this.openSnackBar(res.status, res.body.message); this.srvUsers.getUsers() },
+      error: (error) => { console.log(error); this.openSnackBar(error.status, error.error.message) }
     })
   }
 

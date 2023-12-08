@@ -32,9 +32,6 @@ export class RolesService {
 
   postRole(role: { name: string }) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.post(`${this.apiURL}employee-service/role`, role, { headers, observe: 'response' })
-      .subscribe((res: any) => {
-        if (res.ok) this.getRoles()
-      })
+    return this.http.post(`${this.apiURL}employee-service/role`, role, { headers, observe: 'response' })
   }
 }
