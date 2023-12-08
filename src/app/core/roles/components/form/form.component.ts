@@ -24,8 +24,6 @@ export class FormComponent {
   @Output() createRol = new EventEmitter<{ name: string }>()
   roles: role[] = []
 
-  constructor() { }
-
   onCreateRol(form: NgForm) {
     if (validateRole(form.value.name)) this.createRol.emit(form.value)
   }

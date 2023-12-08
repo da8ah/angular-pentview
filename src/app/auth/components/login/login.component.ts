@@ -33,16 +33,16 @@ export class LoginComponent {
   simbols = patterns.User.PASSSIMB
   isError = false
 
-  constructor(private service: AuthService, private router: Router) {
-    this.service.isAuth$.subscribe(auth => {
-      auth && this.router.navigateByUrl('/dashboard')
+  constructor(private router: Router, private srvAuth: AuthService) {
+    this.srvAuth.isAuth$.subscribe(auth => {
+      if (auth) this.router.navigateByUrl('/dashboard')
     })
   }
 
   onLogin(form: NgForm) {
     if (validateLogin(form.value)) {
       this.isError = false
-      this.service.login(form.value)
+      this.srvAuth.login(form.value)
     }
     else this.isError = true
   }

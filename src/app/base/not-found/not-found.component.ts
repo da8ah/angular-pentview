@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClockService } from '../services/clock.service';
 
@@ -11,18 +11,13 @@ import { ClockService } from '../services/clock.service';
   styleUrl: './not-found.component.scss',
   providers: [ClockService]
 })
-export class NotFoundComponent implements OnDestroy {
+export class NotFoundComponent {
   time = 6
 
-  constructor(private router: Router, private clock: ClockService) {
-    this.clock.start(() => {
+  constructor(private router: Router, private srvClock: ClockService) {
+    this.srvClock.start(() => {
       this.time -= 1;
       if (this.time === 0) this.router.navigateByUrl('dashboard')
     })
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.clock.intervalId)
-    if (this.clock.subscription) this.clock.subscription.unsubscribe()
   }
 }

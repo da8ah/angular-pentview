@@ -14,8 +14,6 @@ export class ClockComponent {
   rxTime: Date
 
   constructor() {
-    ClockService.clock.subscribe((time: Date) => {
-      this.rxTime = time
-    })
+    ClockService.clock.subscribe((time: Date) => { this.rxTime = time })
   }
 }

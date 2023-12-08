@@ -4,9 +4,9 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { validateProfileUpdate } from '../../../../utils/validations';
 import { profile as ProfileType, putProfile } from '../profile.types';
 import { ProfileService } from '../services/profile.service';
-import { validateProfileUpdate } from '../../../../utils/validations';
 
 @Component({
   selector: 'app-profile',
@@ -38,8 +38,8 @@ export class ProfileComponent {
     __v: 0
   }
 
-  constructor(private service: ProfileService) {
-    this.service.profile$.subscribe((profile: ProfileType | null) => {
+  constructor(private srvProfile: ProfileService) {
+    this.srvProfile.profile$.subscribe((profile: ProfileType | null) => {
       if (profile) this.profile = profile
     })
   }
@@ -49,7 +49,6 @@ export class ProfileComponent {
   }
 
   onUpdate(form: NgForm) {
-    if (validateProfileUpdate(form.value as putProfile)) this.service.putProfile(form.value)
+    if (validateProfileUpdate(form.value as putProfile)) this.srvProfile.putProfile(form.value)
   }
-
 }

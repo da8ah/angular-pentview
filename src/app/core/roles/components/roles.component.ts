@@ -21,13 +21,13 @@ export class RolesComponent {
   displayedColumns: string[] = ['position', 'name']
   roles: role[] = []
 
-  constructor(private service: RolesService) {
-    this.service.roles$.subscribe((roles: role[]) => {
+  constructor(private srvRoles: RolesService) {
+    this.srvRoles.roles$.subscribe((roles: role[]) => {
       if (roles.length > 0) this.roles = roles
     })
   }
 
   createRol(role: { name: string }) {
-    this.service.postRole(role)
+    this.srvRoles.postRole(role)
   }
 }

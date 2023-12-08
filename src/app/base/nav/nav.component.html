@@ -23,7 +23,8 @@
             [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
             <img class="avatar rounded-full mb-1" ngSrc="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
                 alt="banner" width="200" height="200" priority>
-            <h2 class="w-full text-center capitalize">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
+            <h2 class="w-full text-center capitalize">{{profileToDisplayInNav.firstName}}
+                {{profileToDisplayInNav.lastName}}</h2>
         </a>
         <mat-divider></mat-divider>
 

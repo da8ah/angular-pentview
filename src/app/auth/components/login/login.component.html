@@ -12,7 +12,7 @@
         <form #loginForm="ngForm" (submit)="onLogin(loginForm)" class="p-2 flex flex-col justify-center items-center">
             <mat-form-field class="w-full text-sm">
                 <input class="w-full" matInput type="text" name="username" id="username" placeholder="Email" required
-                    ngModel>
+                    [pattern]="patterns.User.EMAIL" ngModel>
             </mat-form-field>
             <mat-form-field class="w-full text-sm">
                 <input class="w-full ng-pristine" matInput type="password" name="password" id="password"

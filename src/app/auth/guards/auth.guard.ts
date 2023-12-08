@@ -4,10 +4,10 @@ import { AuthService } from '../services/auth.service';
 
 
 export const authGuard: CanActivateFn = () => {
-  const service = inject(AuthService)
+  const srvAuth = inject(AuthService)
   const router = inject(Router)
 
-  if (service.isTokenSaved) return true;
+  if (srvAuth.isTokenSaved) return true;
 
   router.navigateByUrl('/login')
   return false

@@ -34,8 +34,6 @@ export class TableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor() { }
-
   ngOnChanges(changes: SimpleChanges): void {
     const table: tableItem[] = this.clockings.map((item, i) => {
       return {
@@ -46,7 +44,6 @@ export class TableComponent {
       }
     })
     this.dataSource = new MatTableDataSource(table)
-    // this.userGenerator()
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -65,26 +62,4 @@ export class TableComponent {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
-  // Utils
-  userGenerator() {
-    // Create 100 users
-    const table: tableItem[] = [];
-    for (let i = 1; i <= 100; i++) { table.push(createNewRole(i)); }
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(table);
-  }
 }
-
-
-/** Builds and returns a new User. */
-function createNewRole(index: number): tableItem {
-  return {
-    position: index,
-    _id: index.toString(),
-    type: Math.round(Math.random() * 100) % 2 === 0 ? 'in' : 'out',
-    register: new Date().toISOString()
-  }
-}
-

@@ -34,18 +34,8 @@ import { ClockService } from '../services/clock.service';
 })
 export class NavComponent implements AfterViewInit {
   title = 'Pentview Control de Horas';
-  private profile: ProfileType = {
-    _id: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    role: { _id: '', name: '', createdAt: '', __v: 0 },
-    createdAt: '',
-    __v: 0
-  }
 
-
-  // CLOCK, AUTH & DIALOG
+  // CLOCK & DIALOG
   dialogRef: MatDialogRef<{
     data: { progress: number, countdown: number, isRefresh: boolean }
   }>;
@@ -55,14 +45,20 @@ export class NavComponent implements AfterViewInit {
   dialogSteps = 60
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
-  constructor(private observer: BreakpointObserver, private cdr: ChangeDetectorRef, private router: Router, public dialog: MatDialog, private profileService: ProfileService, private auth: AuthService, private clock: ClockService) {
-    console.log(`exp: ${new Date(this.auth.tokenExpiry).toString()}`)
-    this.clock.start(() => { // Starts Global Clock
-      if (this.auth.isTokenExpired) this.onLogout() // Checks if session expired
+  constructor(
+    private router: Router, public dialog: MatDialog,
+    // Nav Animation
+    private obsBreakpoint: BreakpointObserver, private cdr: ChangeDetectorRef,
+    // Services
+    private srvProfile: ProfileService, private srvAuth: AuthService, private srvClock: ClockService
+  ) {
+    console.log(`exp: ${new Date(this.srvAuth.tokenExpiry).toString()}`)
+    this.srvClock.start(() => { // Starts Global Clock
+      if (this.srvAuth.isTokenExpired) this.onLogout() // Checks if session expired
       else {
-        if (!this.isDialogMounted && this.auth.isTokenAboutToExpire) { // If session it's about to expire mounts Dialog
+        if (!this.isDialogMounted && this.srvAuth.isTokenAboutToExpire) { // If session it's about to expire mounts Dialog
           this.isDialogMounted = true // Dialog mounted flag
-          this.isRefreshPress = false // Persistir/RefreshSession flag
+          this.isRefreshPress = false // RefreshSession flag
           this.openDialog()
         }
         if (this.isDialogMounted) { this.dialogTimeAcc++; this.updateDialog() } // If Dialog it's already mounted
@@ -86,7 +82,7 @@ export class NavComponent implements AfterViewInit {
       this.dialogRef.componentInstance.data.countdown = countdown;
     }
 
-    if (this.isRefreshPress) { // If Persistir/RefreshSession button it's pressed
+    if (this.isRefreshPress) { // If RefreshSession button it's pressed
       this.dialogRef.close()
       this.onRefreshSession()
       this.dialogTimeAcc = 0
@@ -99,10 +95,30 @@ export class NavComponent implements AfterViewInit {
     }
   }
 
+  onRefreshSession() {
+    this.srvAuth.refreshSession()
+    window.location.reload()
+  }
+
+  onLogout() {
+    this.srvAuth.logout()
+    this.router.navigateByUrl('/login')
+  }
+
 
   // SIDENAV ANIMATION & PROFILE
+  private profile: ProfileType = {
+    _id: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    role: { _id: '', name: '', createdAt: '', __v: 0 },
+    createdAt: '',
+    __v: 0
+  }
+
   ngAfterViewInit(): void {
-    this.profileService.profile$.pipe(delay(500)).subscribe((user: ProfileType | null) => {
+    this.srvProfile.profile$.pipe(delay(500)).subscribe((user: ProfileType | null) => {
       this.initBarAnimation()
       if (user) {
         this.profile.firstName = user.firstName
@@ -114,7 +130,7 @@ export class NavComponent implements AfterViewInit {
 
   initBarAnimation() {
     this.sideNav.opened = true
-    this.observer.observe(['(max-width:800px)'])
+    this.obsBreakpoint.observe(['(max-width:800px)'])
       .subscribe((res) => {
         if (res?.matches) {
           this.sideNav.mode = "over"
@@ -127,7 +143,7 @@ export class NavComponent implements AfterViewInit {
       })
   }
 
-  get userProfile() {
+  get profileToDisplayInNav() {
     return {
       firstName: this.profile.firstName,
       lastName: this.profile.lastName
@@ -138,14 +154,4 @@ export class NavComponent implements AfterViewInit {
     return this.profile.role.name.toLowerCase()
   }
 
-
-  onRefreshSession() {
-    this.auth.refreshSession()
-    window.location.reload()
-  }
-
-  onLogout() {
-    this.auth.logout()
-    this.router.navigateByUrl('/login')
-  }
 }

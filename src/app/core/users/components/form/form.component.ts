@@ -50,8 +50,8 @@ export class FormComponent {
   URL: any = this.pfpNotFound
   pfp: any
 
-  constructor(private snackBar: MatSnackBar, private service: UsersService, private rolesService: RolesService) {
-    this.rolesService.roles$.subscribe((roles: role[]) => {
+  constructor(private snackBar: MatSnackBar, private srvUsers: UsersService, private srvRoles: RolesService) {
+    this.srvRoles.roles$.subscribe((roles: role[]) => {
       this.roles = roles.map(role => ({ id: role._id, name: role.name }))
     })
   }
@@ -76,7 +76,7 @@ export class FormComponent {
 
     // HTTP Request
     form.value.profileImage = this.pfp
-    this.service.postUser(form.value).subscribe({
+    this.srvUsers.postUser(form.value).subscribe({
       next: (res) => { if (res.ok) console.log('registrado') },
       error: (error) => { this.openSnackBar(error.status, error.statusText) }
     })

@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -36,8 +36,6 @@ export class TableComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
-  constructor(private service: RolesService) { }
-
   ngOnChanges(changes: SimpleChanges): void {
     const table: tableItem[] = this.roles.map((item, i) => {
       return {
@@ -46,7 +44,6 @@ export class TableComponent implements OnChanges {
       }
     })
     this.dataSource = new MatTableDataSource(table)
-    // this.userGenerator()
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -64,28 +61,5 @@ export class TableComponent implements OnChanges {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
-
-  // Utils
-  userGenerator() {
-    // Create 100 users
-    const table: tableItem[] = [];
-    for (let i = 1; i <= 100; i++) { table.push(createNewRole(i)); }
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(table);
-  }
-}
-
-
-/** Builds and returns a new User. */
-function createNewRole(index: number): tableItem {
-  const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-    'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-    'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
-  return {
-    position: index,
-    name: NAMES[Math.round(Math.random() * (NAMES.length - 1))]
   }
 }

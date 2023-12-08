@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
-import CryptoJS from 'crypto-js'
+import CryptoJS from 'crypto-js';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AuthService {
     return this.auth$.asObservable()
   }
 
-  setCredentials(form: { username: string, password: string }) {
+  storeEncryptedCredentials(form: { username: string, password: string }) {
     const header = btoa(JSON.stringify({
       "alg": "HS256",
       "typ": "JWT"
@@ -36,8 +36,8 @@ export class AuthService {
     this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, form)
       .subscribe((res: { access_token: string }) => {
         const auth = res.access_token !== undefined;
-        auth && this.saveToken(res.access_token)
-        if (this.isTokenSaved) { this.setCredentials(form); this.auth$.next(auth) }
+        if (auth) this.saveToken(res.access_token)
+        if (this.isTokenSaved) { this.storeEncryptedCredentials(form); this.auth$.next(auth) }
       })
   }
 
@@ -50,7 +50,13 @@ export class AuthService {
     return this.login(form)
   }
 
+  logout(): void {
+    localStorage.removeItem(this.tokenName)
+    localStorage.removeItem(this.dumbName)
+    this.auth$.next(false)
+  }
 
+  // TOKEN
   private saveToken(token: string) {
     localStorage.setItem(this.tokenName, token)
   }
@@ -75,11 +81,5 @@ export class AuthService {
     const token = localStorage.getItem(this.tokenName)
     if (!token) return
     return this.tokenExpiry <= Date.now() + 1000 * 60; // Token time <= Now +60s window
-  }
-
-  logout(): void {
-    localStorage.removeItem(this.tokenName)
-    localStorage.removeItem(this.dumbName)
-    this.auth$.next(false)
   }
 }

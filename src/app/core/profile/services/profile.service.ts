@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { profile, putProfile } from '../profile.types';
 
 @Injectable({
@@ -14,10 +14,6 @@ export class ProfileService {
     if (!this.profile.value) this.loadProfile()
   }
 
-  private get token() {
-    return localStorage.getItem('PVAT')
-  }
-
   get profile$() {
     return this.profile.asObservable()
   }
@@ -27,6 +23,10 @@ export class ProfileService {
     if (!token) return null
 
     return (JSON.parse(atob(token.split('.')[1]))).authority.toLowerCase()
+  }
+
+  private get token() {
+    return localStorage.getItem('PVAT')
   }
 
   private loadProfile() {

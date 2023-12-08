@@ -22,9 +22,10 @@ import { AuthService } from '../../auth/services/auth.service';
 export class DialogComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { progress: number, countdown: number, isRefresh: boolean }, private router: Router, private service: AuthService) {
-    this.service.isAuth$.subscribe(auth => {
-      auth && this.router.navigateByUrl('/dashboard')
+    @Inject(MAT_DIALOG_DATA) public data: { progress: number, countdown: number, isRefresh: boolean },
+    private router: Router, private srvAuth: AuthService) {
+    this.srvAuth.isAuth$.subscribe(auth => {
+      if (auth) this.router.navigateByUrl('/dashboard')
     })
   }
 
@@ -33,7 +34,7 @@ export class DialogComponent {
   }
 
   onLogout() {
-    this.service.logout()
+    this.srvAuth.logout()
     this.router.navigateByUrl('/login')
   }
 }
