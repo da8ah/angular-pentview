@@ -31,7 +31,7 @@ Pentview requiere un sistema de Control de Horas para la gestión de su personal
 
 ## Solución
 
-Al estar construida con Angular v17 esta aplicación no utiliza módulos como base, sino que implementa componentes standalone los cuales se integran importándolos directamente desde los otros componentes.
+Al estar construida con Angular v17 esta aplicación no utiliza módulos como base, sino que implementa componentes standalone los cuales se integran importándolos directamente desde los otros componentes. Adicionalmente, se emplea la nueva sintaxis pero cabe mencionar que esta versión es retrocompatible por lo que se puede utilizar la sintaxis convencional sin ningún problema.
 
 <div align="center">
 <img style="width:70%" src="./doc/arch.png" >
@@ -135,7 +135,6 @@ Arquitectura de la aplicación:
 * Depuración y actualización de comentarios
 * Formularios con patrones de validación
 * Notificación de acciones
-* Reloj en formato 24h
 * Actualización de README
 
 (Tiber) **Noviembre 2023 v0.11**

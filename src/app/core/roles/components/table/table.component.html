@@ -18,8 +18,8 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-            <mat-cell class="uppercase" *matCellDef="let element"> {{element.name}} </mat-cell>
+            <mat-header-cell class="min-w-[200px]" *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell class="min-w-[200px] uppercase" *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
