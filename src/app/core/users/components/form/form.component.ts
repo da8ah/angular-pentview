@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {
@@ -24,6 +25,7 @@ import { UsersService } from '../../services/users.service';
     CommonModule,
     SnackbarComponent,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
@@ -56,6 +58,7 @@ export class FormComponent {
     })
   }
 
+  // DisplayImage
   useImage(event: any) {
     if (event.target.files && event.target.files[0]) {
       this.pfp = event.target.files[0] as File

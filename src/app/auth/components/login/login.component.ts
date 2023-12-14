@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +34,8 @@ export class LoginComponent {
   simbols = patterns.User.PASSSIMB
   isError = false
 
-  constructor(private router: Router, private srvAuth: AuthService) {
+  constructor(public dialog: MatDialog, private router: Router, private srvAuth: AuthService) {
+    if (this.dialog) this.dialog.closeAll()
     this.srvAuth.isAuth$.subscribe(auth => {
       if (auth) this.router.navigateByUrl('/dashboard')
     })

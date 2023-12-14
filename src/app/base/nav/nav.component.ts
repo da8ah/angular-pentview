@@ -46,7 +46,7 @@ export class NavComponent implements AfterViewInit {
 
   @ViewChild(MatSidenav) sideNav!: MatSidenav;
   constructor(
-    private router: Router, public dialog: MatDialog,
+    public dialog: MatDialog, private router: Router,
     // Nav Animation
     private obsBreakpoint: BreakpointObserver, private cdr: ChangeDetectorRef,
     // Services

@@ -13,9 +13,20 @@
 <form
     class="grid grid-rows-{{isErrorPassword ? 6 : 5}} md:grid-cols-2 gap-4 justify-center items-center justify-items-center"
     #userForm="ngForm" (submit)="onSave(userForm)">
-    <input class="md:col-span-2 text-xs {{URL === pfpNotFound && 'w-[90px]'}}" type="file" accept=".png"
-        name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
-        (change)="useImage($event)" required ngModel>
+
+    <span class="md:col-span-2 w-full md:w-1/3">
+        <div class="w-full text-center">
+            <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">
+                <span class="flex justify-center items-center">
+                    <mat-icon class="mr-[5px]">{{URL === pfpNotFound ? "upload" : "autorenew" }}</mat-icon>
+                    <span>{{URL === pfpNotFound ? "Subir" : "Cambiar"}}</span>
+                </span>
+                <input class="hidden text-xs {{URL === pfpNotFound && 'w-[90px]'}}" #fileInput type="file" accept=".png"
+                    name="profileImage" id="profileImage" placeholder="Foto de perfil" enctype="multipart/form-data"
+                    (change)="useImage($event)" required ngModel>
+            </button>
+        </div>
+    </span>
 
     <mat-form-field class="w-full text-sm">
         <input matInput type="text" name="firstName" id="firstName" placeholder="Nombre" required
