@@ -21,8 +21,7 @@
         <mat-divider class="block md:hidden"></mat-divider>
         <a class="w-full hover:underline hover:text-[royalblue]" routerLink="profile" routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
-            <img class="avatar rounded-full mb-1" ngSrc="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-                alt="banner" width="200" height="200" priority>
+            <img class="avatar object-contain mb-1" ngSrc="{{pfp}}" alt="banner" width="200" height="200" priority>
             <h2 class="w-full text-center capitalize">{{profileToDisplayInNav.firstName}}
                 {{profileToDisplayInNav.lastName}}</h2>
         </a>

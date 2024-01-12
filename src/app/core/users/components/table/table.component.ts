@@ -15,6 +15,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SnackbarComponent } from '../../../../base/snackbar/snackbar.component';
 import { UsersService } from '../../services/users.service';
 import { tableItem, user } from '../../users.types';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { ProfileService } from '../../../profile/services/profile.service';
 
 @Component({
   selector: 'app-table',
@@ -30,14 +32,19 @@ import { tableItem, user } from '../../users.types';
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [UsersService]
+  providers: [UsersService, ProfileService, AuthService]
 })
 export class TableComponent implements OnChanges {
   // Data
   @Input() displayedColumns: string[]
   @Input() users: user[]
   @Input() isDelete: boolean
+  @Output() updateTable = new EventEmitter()
   @Output() changeDelete = new EventEmitter()
+
+  getUsers() {
+    this.updateTable.emit()
+  }
 
   onChangeDelete() {
     this.changeDelete.emit()
@@ -54,13 +61,19 @@ export class TableComponent implements OnChanges {
   }>;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  constructor(private snackBar: MatSnackBar, private srvUsers: UsersService) { }
+  constructor(private snackBar: MatSnackBar, private srvUsers: UsersService, private srvProfile: ProfileService, private srvAuth: AuthService) { }
 
   onDelete(id: string) {
     const user = this.users.find(user => user._id === id)
     if (!!user) this.srvUsers.deleteUser(user).subscribe({
-      next: (res: any) => { if (res.ok) console.log('eliminado'); this.openSnackBar(res.status, res.body.message); this.srvUsers.getUsers() },
-      error: (error) => { console.log(error); this.openSnackBar(error.status, error.error.message) }
+      next: (res: any) => {
+        if (res.ok) {
+          this.openSnackBar(res.status, res.body.message)
+          this.getUsers()
+          if (user._id === this.srvProfile.profileId) this.srvAuth.logout()
+        }
+      },
+      error: (error) => { this.openSnackBar(error.status, error.error.message) }
     })
   }
 

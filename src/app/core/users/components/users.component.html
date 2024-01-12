@@ -4,9 +4,9 @@
 
 <div class="p-5 flex flex-col justify-center {{isNew && 'items-center'}}">
     @if (isNew){
-    <app-form class="w-full md:w-[70%]"></app-form>
+    <app-form class="w-full md:w-[70%]" (updateTable)="updateTable()"></app-form>
     } @else {
-    <app-table [displayedColumns]="displayedColumns" [users]="users" [isDelete]="isDelete"
+    <app-table [displayedColumns]="displayedColumns" [users]="users" [isDelete]="isDelete" (updateTable)="updateTable()"
         (changeDelete)="changeDelete()"></app-table>
     }
 </div>

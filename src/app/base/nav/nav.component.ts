@@ -124,6 +124,7 @@ export class NavComponent implements AfterViewInit {
         this.profile.firstName = user.firstName
         this.profile.lastName = user.lastName
         this.profile.role.name = user.role.name
+        this.profile.profileImage = user.profileImage
       }
     })
   }
@@ -141,6 +142,10 @@ export class NavComponent implements AfterViewInit {
         }
         this.cdr.detectChanges()
       })
+  }
+
+  protected get pfp() {
+    return this.profile.profileImage || "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
   }
 
   get profileToDisplayInNav() {

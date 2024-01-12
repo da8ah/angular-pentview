@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import CryptoJS from 'crypto-js';
 import { BehaviorSubject } from 'rxjs';
+import { env } from '../../shared/dev.env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiURL = 'http://165.227.193.167/';
+  private apiURL = env.apiURL;
   private auth$ = new BehaviorSubject<boolean>(false)
   private tokenName = 'PVAT' // PentView Auth Token
   private dumbName = 'PVDT' // PentView Dumb Token
@@ -34,10 +35,13 @@ export class AuthService {
 
   login(form: { username: string, password: string }) {
     this.http.post<{ access_token: string }>(`${this.apiURL}employee-service/user/auth/login`, form)
-      .subscribe((res: { access_token: string }) => {
-        const auth = res.access_token !== undefined;
-        if (auth) this.saveToken(res.access_token)
-        if (this.isTokenSaved) { this.storeEncryptedCredentials(form); this.auth$.next(auth) }
+      .subscribe({
+        next: (res: { access_token: string }) => {
+          const auth = res.access_token !== undefined;
+          if (auth) this.saveToken(res.access_token)
+          if (this.isTokenSaved) { this.storeEncryptedCredentials(form); this.auth$.next(auth) }
+        },
+        error: (err) => console.log(err)
       })
   }
 

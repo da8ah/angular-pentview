@@ -7,7 +7,7 @@ export const patterns = {
         PASSSIMB: '~!@#$%^&*+\-\\/.,{}[];:?<>"_\' ',
     },
     Role: {
-        NAME: /^[A-Za-z0-1]{1,15}$/
+        NAME: /^[A-Za-z0-1\s]{1,50}$/
     }
 }
 

@@ -10,7 +10,7 @@ import {
   MatSnackBarRef,
   MatSnackBarVerticalPosition
 } from '@angular/material/snack-bar';
-import { validateProfileUpdate } from '../../../../utils/validations';
+import { validateProfileUpdate } from '../../../shared/utils/validations';
 import { SnackbarComponent } from '../../../base/snackbar/snackbar.component';
 import { profile as ProfileType, putProfile } from '../profile.types';
 import { ProfileService } from '../services/profile.service';
@@ -42,6 +42,7 @@ export class ProfileComponent {
     email: '',
     firstName: '',
     lastName: '',
+    profileImage: '',
     role: {
       _id: '',
       name: '',
@@ -59,7 +60,7 @@ export class ProfileComponent {
   }
 
   protected get pfp() {
-    return this.profile.profileImage || 'https://rickandmortyapi.com/api/character/avatar/1.jpeg';
+    return this.profile.profileImage
   }
 
   onUpdate(form: NgForm) {

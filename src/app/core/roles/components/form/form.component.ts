@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { patterns, validateRole } from '../../../../../utils/validations';
+import { patterns, validateRole } from '../../../../shared/utils/validations';
 import { role } from '../../roles.types';
 
 @Component({
@@ -21,11 +21,11 @@ import { role } from '../../roles.types';
   styleUrl: './form.component.scss'
 })
 export class FormComponent {
-  @Output() createRol = new EventEmitter<{ name: string }>()
+  @Output() createRol = new EventEmitter<NgForm>()
   roles: role[] = []
   readonly patterns = patterns
 
   onCreateRol(form: NgForm) {
-    if (validateRole(form.value.name)) this.createRol.emit(form.value)
+    if (validateRole(form.value.name)) this.createRol.emit(form)
   }
 }

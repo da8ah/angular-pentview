@@ -4,10 +4,10 @@
 - [x] Acceso a todas las rutas con Bearer token (excepto Login)
 - [x] Módulos para el rol de Administrador: PERFIL, HORARIO, ROLES y USUARIOS
 - [x] Módulos para otros roles: PERFIL y HORARIO
-- [ ] El Administrador en el módulo de USUARIOS puede: CREAR, LISTAR y ELIMINAR
-    - [x] CREAR: diseño y validación del formulario (sin funcionalidad)
+- [x] El Administrador en el módulo de USUARIOS puede: CREAR, LISTAR y ELIMINAR
+    - [x] CREAR: diseño y validación del formulario
     - [x] LISTAR: diseño e implementación de funcionalidad
-    - [x] ELIMINAR: diseño del botón de acción (sin funcionalidad)
+    - [x] ELIMINAR: diseño del botón de acción
 - [x] Todos los usuarios pueden actualizar sus datos en el módulo PERFIL
 - [x] Todos los usuarios pueden registrar ENTRADA/SALIDA en el módulo HORARIO
 - [x] Se debe mostrar una notificación de caducidad de sesión al usuario (60s):
@@ -31,7 +31,7 @@ Pentview requiere un sistema de Control de Horas para la gestión de su personal
 
 ## Solución
 
-Al estar construida con Angular v17 esta aplicación no utiliza módulos como base, sino que implementa componentes standalone los cuales se integran importándolos directamente desde los otros componentes. Adicionalmente, se emplea la nueva sintaxis pero cabe mencionar que esta versión es retrocompatible por lo que se puede utilizar la sintaxis convencional sin ningún problema.
+Al estar construida con Angular v17 esta aplicación no utiliza módulos como base, sino que implementa componentes standalone los cuales se integran importándolos directamente desde los otros componentes. Adicionalmente, se emplea la nueva sintaxis pero cabe mencionar que esta versión es retrocompatible por lo que se puede utilizar la sintaxis convencional sin ningún problema. Además, se ha implementado un Backend mínimo en [GO Pentview Control de Horas](https://github.com/da8ah/go-pentview).
 
 <div align="center">
 <img style="width:70%" src="./doc/arch.png" >
@@ -129,6 +129,16 @@ Arquitectura de la aplicación:
 - [ ] Testing
 
 ## Versionamiento
+
+(Tiber) **Diciembre 2024 v1.0**
+
+* Actualización de README
+* Implementación de Backend en [GO](https://github.com/da8ah/go-pentview)
+* Implementación de Funcionalidades
+* Verificación del funcionamiento
+* Implementación de Interceptor
+* Correcciones de lógica
+
 
 (Tiber) **Diciembre 2023 v0.13**
 

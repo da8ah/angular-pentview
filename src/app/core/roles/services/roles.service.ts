@@ -2,12 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { role } from '../roles.types';
+import { env } from '../../../shared/dev.env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolesService {
-  private apiURL = 'http://165.227.193.167/';
+  private apiURL = env.apiURL;
   private roles = new BehaviorSubject<role[]>([])
 
   constructor(private http: HttpClient) {
@@ -23,15 +24,13 @@ export class RolesService {
   }
 
   getRoles() {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.get<{ data: [] }>(`${this.apiURL}employee-service/role`, { headers })
+    this.http.get<{ data: [] }>(`${this.apiURL}employee-service/role`)
       .subscribe((res: { data: [] }) => {
         this.roles.next(res.data as role[])
       })
   }
 
   postRole(role: { name: string }) {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    return this.http.post(`${this.apiURL}employee-service/role`, role, { headers, observe: 'response' })
+    return this.http.post(`${this.apiURL}employee-service/role`, role, { observe: 'response' })
   }
 }

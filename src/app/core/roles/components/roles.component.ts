@@ -11,6 +11,7 @@ import { role } from '../roles.types';
 import { RolesService } from '../services/roles.service';
 import { FormComponent } from './form/form.component';
 import { TableComponent } from './table/table.component';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-roles',
@@ -41,9 +42,9 @@ export class RolesComponent {
     })
   }
 
-  createRol(role: { name: string }) {
-    this.srvRoles.postRole(role).subscribe({
-      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, res.body.message); this.srvRoles.getRoles() } },
+  createRol(form: NgForm) {
+    this.srvRoles.postRole(form.value).subscribe({
+      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, res.body.message); form.resetForm(); this.srvRoles.getRoles() } },
       error: (error) => { this.openSnackBar(error.status, error.error.message) }
     })
   }

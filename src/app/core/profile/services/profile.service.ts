@@ -2,12 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { profile, putProfile } from '../profile.types';
+import { env } from '../../../shared/dev.env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiURL = 'http://165.227.193.167/'
+  private apiURL = env.apiURL;
   private profile = new BehaviorSubject<profile | null>(null)
 
   constructor(private http: HttpClient) {
@@ -18,6 +19,13 @@ export class ProfileService {
     return this.profile.asObservable()
   }
 
+  get profileId() {
+    const token = localStorage.getItem('PVAT')
+    if (!token) return null
+
+    return (JSON.parse(atob(token.split('.')[1]))).sub
+  }
+
   get role() {
     const token = localStorage.getItem('PVAT')
     if (!token) return null
@@ -25,20 +33,16 @@ export class ProfileService {
     return (JSON.parse(atob(token.split('.')[1]))).authority.toLowerCase()
   }
 
-  private get token() {
-    return localStorage.getItem('PVAT')
-  }
-
   private loadProfile() {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    this.http.get(`${this.apiURL}employee-service/user/profile`, { headers })
+    this.http.get(`${this.apiURL}employee-service/user/profile`)
       .subscribe((res: any) => {
+        if (res.profileImage !== undefined) res.profileImage = `${this.apiURL}${res.profileImage}`
+        else res.profileImage = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         this.profile.next(res as profile || null)
       })
   }
 
   putProfile(profile: putProfile) {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    return this.http.put(`${this.apiURL}employee-service/user/update-profile`, profile, { headers, observe: 'response' })
+    return this.http.put(`${this.apiURL}employee-service/user/update-profile`, profile, { observe: 'response' })
   }
 }

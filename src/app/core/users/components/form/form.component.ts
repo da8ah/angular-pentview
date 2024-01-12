@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,7 +12,7 @@ import {
   MatSnackBarRef,
   MatSnackBarVerticalPosition
 } from '@angular/material/snack-bar';
-import { patterns, validateUser } from '../../../../../utils/validations';
+import { patterns, validateUser } from '../../../../shared/utils/validations';
 import { SnackbarComponent } from '../../../../base/snackbar/snackbar.component';
 import { role } from '../../../roles/roles.types';
 import { RolesService } from '../../../roles/services/roles.service';
@@ -36,6 +36,12 @@ import { UsersService } from '../../services/users.service';
   providers: [UsersService, RolesService]
 })
 export class FormComponent {
+
+  @Output() updateTable = new EventEmitter()
+  getUsers() {
+    this.updateTable.emit()
+  }
+
   snackBarRef: MatSnackBarRef<{
     data: { status: number, message: string }
   }>;
@@ -78,10 +84,10 @@ export class FormComponent {
     if (this.isErrorPFP || this.isErrorPassword) return
 
     // HTTP Request
-    form.value.profileImage = this.pfp
-    this.srvUsers.postUser(form.value).subscribe({
-      next: (res: any) => { if (res.ok) console.log('registrado'); this.openSnackBar(res.status, res.body.message); this.srvUsers.getUsers() },
-      error: (error) => { console.log(error); this.openSnackBar(error.status, error.error.message) }
+    form.value.profileImage = this.pfp.name
+    this.srvUsers.postUser(form.value, this.pfp).subscribe({
+      next: (res: any) => { if (res.ok) { this.openSnackBar(res.status, res.body.message); form.resetForm(); this.URL = this.pfpNotFound; this.getUsers() } },
+      error: (error) => { this.openSnackBar(error.status, error.error.message) }
     })
   }
 
